@@ -1,0 +1,7 @@
+export const CANDLE_REQUEST = 'CANDLE_REQUEST'
+export const CANDLE_SUCCESS = 'CANDLE_SUCCESS'
+export const CANDLE_FAIL = 'CANDLE_FAIL'
+
+export const INFO_REQUEST = 'INFO_REQUEST'
+export const INFO_SUCCESS = 'INFO_SUCCESS'
+export const INFO_FAIL = 'INFO_FAIL'
