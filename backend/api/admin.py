@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import *
 
-# Register your models here.
+@admin.register(FavStocksModel)
+class FavStockView(admin.ModelAdmin):
+    list_display = ('id', 'stock', 'user')

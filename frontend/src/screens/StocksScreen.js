@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import BaseScreen from "./BaseScreen";
 import Message from "../components/Message";
 import {useEffect, useState} from "react";
-import {candleChart, infoStocksTable} from "../actions/stocksActions";
+import {candleChart, favStocksAction, infoStocksTable} from "../actions/stocksActions";
 import CandleStick from "../components/Stocks/chart";
 import Loader from "../components/Loader";
 import {Carousel, Container, Stack} from "react-bootstrap";
@@ -14,11 +14,13 @@ export default function StocksScreen() {
     const loginReducer = useSelector(state => state.userLogin)
     const {userInfo} = loginReducer
     const infoReducer = useSelector(state => state.infoStocks)
-    
+    const favReducer = useSelector(state => state.favStocks)
+
+
     const candle = useSelector(state => state.candleChart)
     const {error, loading, data} = candle
     const [search, setSearch] = useState('')
-
+    
     const submitHandler = (e) => {
         var stocks = search.toUpperCase();
         stocks = stocks.replaceAll(/\s{1,}/g, ',')
@@ -30,6 +32,7 @@ export default function StocksScreen() {
     useEffect(() => {
         dispatch(candleChart(['^BVSP']))
         dispatch(infoStocksTable(['PETR4.SA']))
+        dispatch(favStocksAction(userInfo.id))
     }, [dispatch])
 
     return (
@@ -42,7 +45,8 @@ export default function StocksScreen() {
                                 <FormStocks
                                     onSubmit={submitHandler}
                                     onChange={(e) => setSearch(e.target.value)}/>
-                                    {infoReducer.loading?<Loader />:<TableInfo data={infoReducer.data.data?infoReducer.data.data:[{'info':1}]}/>}
+                                    {infoReducer.loading?<Loader />:
+                                    <TableInfo favs={favReducer.data.map((e)=>e.stock)} data={infoReducer.data.data?infoReducer.data.data:[{'info':1}]}/>}
                                     <CandleStick data={data}/>
                             </Container>
 

@@ -7,12 +7,14 @@ from .serializer import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime as dt
+from rest_framework.viewsets import ModelViewSet
 
 @api_view(['GET'])
 def get_urls(request):
     urls = [
         'api/v1/user',
-        'api/v1/stocks'
+        'api/v1/stocks',
+        'api/v1/stocks/pk/fav'
     ]
     return Response(urls)
 
@@ -59,7 +61,7 @@ def info_stocks(request):
     lista = []
     name_info = {'marketCap': 'Market Cap', 'totalDebt': 'Total Debt',
                      'enterpriseValue':'Enterprise Value',
-                     'ebitda': 'EBITDA', 'EV EBITDA':'EV EBITDA', 'trailingEps': 'Trailing Eps', 'floatShares': 'Float Shares',
+                     'ebitda': 'EBITDA', 'enterpriseToEbitda':'EV EBITDA', 'trailingEps': 'Trailing Eps', 'floatShares': 'Float Shares',
                      'sharesOutstanding':'Shares Outstanding', 'previousClose':'Previous Close',
                      'governanceEpochDate': 'Governance Epoch Date'}
     infos = []
@@ -74,12 +76,35 @@ def info_stocks(request):
         for key, value in name_info.items():
             dic = {'info': value}
             for (stock, info) in infos:
-                if key != 'EV EBITDA':
                     dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
-                else:
-                    dic[stock] = round(info.get('enterpriseValue')/info.get('ebitda'),2)
             lista.append(dic)
         data['data'] = lista
+    return Response(data)
+
+class APIFavStock(ModelViewSet):
+    serializer_class = FavStockSerializer
+    queryset = FavStocksModel.objects.all()
+    permission_classes =[IsAuthenticated]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        pk = self.kwargs.get('pk')
+        return qs.filter(user__id=pk)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def APIFavStockUpdate(request, pk):
+    data = {}
+    if request.method == 'POST':
+        user = User.objects.get(id = pk)
+        stock = request.data.get('stock')
+        method = request.data.get('method')
+        if method == 'POST':
+            FavStocksModel.objects.create(user=user, stock=stock)
+            data['success'] = f'{stock} favoritado'
+        else:
+            FavStocksModel.objects.get(user=user, stock=stock).delete()
+            data['success'] = f'{stock} desfavoritado'
     return Response(data)
 
 
