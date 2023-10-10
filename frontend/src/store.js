@@ -1,12 +1,13 @@
 import { legacy_createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { stocksCandleReducer } from './reducers/stocksReducers'
+import { infoStocksReducer, stocksCandleReducer } from './reducers/stocksReducers'
 import { userLoginReducer } from './reducers/userReducers'
 
 const reducer = combineReducers({
     candleChart: stocksCandleReducer,
-    userLogin: userLoginReducer
+    infoStocks: infoStocksReducer,
+    userLogin: userLoginReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?

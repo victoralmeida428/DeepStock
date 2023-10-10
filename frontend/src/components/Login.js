@@ -33,7 +33,7 @@ export default function LoginComponent() {
             <Container
                 className="mt-4"
                 style={{
-                    width: '20vw'
+                    width: '50vw'
                 }}>
 
                 <Form onSubmit={submitHandler}>
@@ -46,7 +46,7 @@ export default function LoginComponent() {
                         style={{
                             width: '100%'
                         }}
-                        className="mt-3"
+                        className="mt-5"
                         variant="info">Login</Button>
                 </Form>
             </Container>

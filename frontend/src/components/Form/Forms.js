@@ -9,7 +9,7 @@ export default function FormStocks({onChange, onSubmit}) {
     return (
         <Form className="m-3" onSubmit={onSubmit}>
             <Form.Label>Stocks</Form.Label>
-            <Form.Control onChange={onChange} onKeyDown={enterHandler} type="text" name="stocks"/>
+            <Form.Control placeholder="search your stocks..." onChange={onChange} onKeyDown={enterHandler} type="text" name="stocks"/>
         </Form>
     )
 

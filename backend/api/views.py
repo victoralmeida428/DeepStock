@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .serializer import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+import datetime as dt
 
 @api_view(['GET'])
 def get_urls(request):
@@ -31,7 +31,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def stocks(request):
@@ -50,6 +49,34 @@ def stocks(request):
                 object['high'] = list(df.High.values)
                 object['low'] = list(df.Low.values)
                 data.append(object)
+    return Response(data)
+
+
+# @permission_classes([IsAuthenticated])
+@api_view(['GET', 'POST'])
+def info_stocks(request):
+    data = {}
+    lista = []
+    name_info = {'marketCap': 'Market Cap', 'totalDebt': 'Total Debt',
+                     'enterpriseValue':'Enterprise Value',
+                     'ebitda': 'EBITDA', 'trailingEps': 'Trailing Eps', 'floatShares': 'Float Shares',
+                     'sharesOutstanding':'Shares Outstanding', 'previousClose':'Previous Close',
+                     'governanceEpochDate': 'Governance Epoch Date'}
+    infos = []
+    if request.method == 'POST':
+        for stock in request.data.get('stocks'):
+            if not str(stock).startswith('^'):
+                ticker = yf.Ticker(stock)
+                ticker.info['governanceEpochDate'] = dt.datetime.fromtimestamp(ticker.info.get('governanceEpochDate',11111111111)).strftime("%d/%m/%Y") if ticker.info.get('governanceEpochDate',False) else None
+                infos.append((stock, ticker.info))
+            
+            
+        for key, value in name_info.items():
+            dic = {'info': value}
+            for (stock, info) in infos:
+                dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
+            lista.append(dic)
+        data['data'] = lista
     return Response(data)
 
 
