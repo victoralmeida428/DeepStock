@@ -59,7 +59,7 @@ def info_stocks(request):
     lista = []
     name_info = {'marketCap': 'Market Cap', 'totalDebt': 'Total Debt',
                      'enterpriseValue':'Enterprise Value',
-                     'ebitda': 'EBITDA', 'trailingEps': 'Trailing Eps', 'floatShares': 'Float Shares',
+                     'ebitda': 'EBITDA', 'EV EBITDA':'EV EBITDA', 'trailingEps': 'Trailing Eps', 'floatShares': 'Float Shares',
                      'sharesOutstanding':'Shares Outstanding', 'previousClose':'Previous Close',
                      'governanceEpochDate': 'Governance Epoch Date'}
     infos = []
@@ -74,7 +74,10 @@ def info_stocks(request):
         for key, value in name_info.items():
             dic = {'info': value}
             for (stock, info) in infos:
-                dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
+                if key != 'EV EBITDA':
+                    dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
+                else:
+                    dic[stock] = round(info.get('enterpriseValue')/info.get('ebitda'),2)
             lista.append(dic)
         data['data'] = lista
     return Response(data)
