@@ -46,7 +46,7 @@ export default function StocksScreen() {
                                     onSubmit={submitHandler}
                                     onChange={(e) => setSearch(e.target.value)}/>
                                     {infoReducer.loading?<Loader />:
-                                    <TableInfo favs={favReducer.data.map((e)=>e.stock)} data={infoReducer.data.data?infoReducer.data.data:[{'info':1}]}/>}
+                                    <TableInfo favs={favReducer&&favReducer.data?favReducer.data.map((e)=>e.stock):['']} data={infoReducer.data.data?infoReducer.data.data:[{'info':1}]}/>}
                                     <CandleStick data={data}/>
                             </Container>
 

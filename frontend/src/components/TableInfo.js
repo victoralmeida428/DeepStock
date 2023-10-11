@@ -1,32 +1,34 @@
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { favStocksUpdateAction } from "../actions/stocksActions";
+import { favStocksAction, favStocksUpdateAction } from "../actions/stocksActions";
 
 export default function TableInfo({ data, favs }) {
     const dispatch = useDispatch()
     const loginReducer = useSelector(state => state.userLogin)
     const {userInfo} = loginReducer
+    const infoReducer = useSelector(state => state.infoStocks)
     const updateFav = useSelector(state => state.favStocksUpdate)
+    const keys = Object.keys(data[0])
 
     const favAction = (e)=>{
         const stock = e.target.parentElement.innerText
         if (e.target.className.includes('solid')){
-
             dispatch(favStocksUpdateAction(userInfo.id, {
-                stock: stock,
+                stock: stock.trim(),
                 method: 'DELETE'
             }))
         }
+
         else {
             dispatch(favStocksUpdateAction(userInfo.id, {
-                stock: stock,
+                stock: stock.trim(),
                 method: 'POST'
             }))
         }
+        dispatch(favStocksAction(userInfo.id))
     }
-    const keys = Object.keys(data[0])
+    
     const head = keys.map((e) => {
-        console.log(favs, e, favs.includes(e));
         if (e === 'info') {
             return (<td key={e}>{e}</td>)
         }

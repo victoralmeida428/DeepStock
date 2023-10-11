@@ -92,7 +92,7 @@ class APIFavStock(ModelViewSet):
         return qs.filter(user__id=pk)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def APIFavStockUpdate(request, pk):
     data = {}
     if request.method == 'POST':
@@ -100,7 +100,7 @@ def APIFavStockUpdate(request, pk):
         stock = request.data.get('stock')
         method = request.data.get('method')
         if method == 'POST':
-            FavStocksModel.objects.create(user=user, stock=stock)
+            FavStocksModel.objects.get_or_create(user=user, stock=stock)
             data['success'] = f'{stock} favoritado'
         else:
             FavStocksModel.objects.get(user=user, stock=stock).delete()
