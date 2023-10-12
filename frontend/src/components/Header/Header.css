@@ -1,0 +1,11 @@
+.clientRegister{
+    background-color: rgb(49, 49, 129);
+    color: aliceblue;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.clientRegister:hover{
+    background-color: var(--bs-dark-bg-subtle);
+    color: var(--bs-heading-color);
+}

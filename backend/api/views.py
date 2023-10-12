@@ -74,7 +74,7 @@ def info_stocks(request):
             
             
         for key, value in name_info.items():
-            dic = {'info': value}
+            dic = {'Informations': value}
             for (stock, info) in infos:
                     dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
             lista.append(dic)

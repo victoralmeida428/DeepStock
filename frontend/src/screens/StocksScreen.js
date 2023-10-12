@@ -22,38 +22,44 @@ export default function StocksScreen() {
     const [search, setSearch] = useState('')
     
     const submitHandler = (e) => {
-        var stocks = search.toUpperCase();
-        stocks = stocks.replaceAll(/\s{1,}/g, ',')
-        const stocks_array = stocks.split(',')
-        dispatch(candleChart(stocks_array.filter(item => item.trim() !== '')))
-        dispatch(infoStocksTable(stocks_array.filter(item => item.trim() !== '')))
+        e.preventDefault()
+        var stocks = search.map((e)=>e.value)
+        stocks = stocks.map((e)=>e.toUpperCase());
+        stocks = stocks.map((e)=>e.trim());
+        dispatch(candleChart(stocks.filter(item => item.trim() !== '')))
+        dispatch(infoStocksTable(stocks.filter(item => item.trim() !== '')))
     }
 
     useEffect(() => {
-        dispatch(candleChart(['^BVSP']))
+        dispatch(candleChart(['PETR4.SA']))
         dispatch(infoStocksTable(['PETR4.SA']))
         dispatch(favStocksAction(userInfo.id))
     }, [dispatch])
 
+
     return (
         <BaseScreen>
+            <Container>
+                {userInfo?<FormStocks
+                                    onSubmit={submitHandler}
+                                    onChange={(e) => setSearch(e)}/>:''}
+            
             {
                 userInfo
                     ? loading
                         ? <Loader/>
-                        : <Container>
-                                <FormStocks
-                                    onSubmit={submitHandler}
-                                    onChange={(e) => setSearch(e.target.value)}/>
+                        : <>
+                                
                                     {infoReducer.loading?<Loader />:
                                     <TableInfo favs={favReducer&&favReducer.data?favReducer.data.map((e)=>e.stock):['']} data={infoReducer.data.data?infoReducer.data.data:[{'info':1}]}/>}
                                     <CandleStick data={data}/>
-                            </Container>
+                            </>
 
                     : <Message variant='light'>Please, make
                             <a className="ms-1" href="/login">login</a>
                         </Message>
             }
+            </Container>
         </BaseScreen>
     )
 }

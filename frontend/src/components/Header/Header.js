@@ -1,6 +1,7 @@
 import {Container, Nav, NavDropdown, Navbar} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../actions/userActions";
+import { logout } from "../../actions/userActions";
+import './Header.css'
 
 export default function Header(props) {
     const userLogin = useSelector(state => state.userLogin)
@@ -28,7 +29,8 @@ export default function Header(props) {
                             </NavDropdown>
                         </Nav>
                         <Nav className="ms-auto">
-                            {userInfo?<Nav.Link href="/" onClick={logoutHandler}>Logout</Nav.Link>:<Nav.Link href="/login">Login</Nav.Link>}
+                            {userInfo?<Nav.Link href="/" onClick={logoutHandler}>Logout</Nav.Link>:<Nav.Link style={{fontWeight:'bold'}} href="/login">Login</Nav.Link>}
+                            {userInfo?'':<Nav.Link className="clientRegister" href="">Become a client !</Nav.Link>}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
