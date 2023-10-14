@@ -41,6 +41,7 @@ export default function StocksScreen() {
         <BaseScreen>
             <Container>
                 {userInfo?<FormStocks
+                                    isMulti={true}
                                     onSubmit={submitHandler}
                                     onChange={(e) => setSearch(e)}/>:''}
             

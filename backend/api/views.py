@@ -8,13 +8,16 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime as dt
 from rest_framework.viewsets import ModelViewSet
+from prophet import Prophet
+import pandas as pd
 
 @api_view(['GET'])
 def get_urls(request):
     urls = [
         'api/v1/user',
         'api/v1/stocks',
-        'api/v1/stocks/pk/fav'
+        'api/v1/stocks/pk/fav',
+        'api/v1/stocks/predict'
     ]
     return Response(urls)
 
@@ -59,7 +62,7 @@ def stocks(request):
 def info_stocks(request):
     data = {}
     lista = []
-    name_info = {'marketCap': 'Market Cap', 'totalDebt': 'Total Debt',
+    name_info = {'longName': 'Name', 'marketCap': 'Market Cap', 'totalDebt': 'Total Debt',
                      'enterpriseValue':'Enterprise Value',
                      'ebitda': 'EBITDA', 'enterpriseToEbitda':'EV EBITDA', 'trailingEps': 'Trailing Eps', 'floatShares': 'Float Shares',
                      'sharesOutstanding':'Shares Outstanding', 'previousClose':'Previous Close',
@@ -92,7 +95,7 @@ class APIFavStock(ModelViewSet):
         return qs.filter(user__id=pk)
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def APIFavStockUpdate(request, pk):
     data = {}
     if request.method == 'POST':
@@ -107,5 +110,42 @@ def APIFavStockUpdate(request, pk):
             data['success'] = f'{stock} desfavoritado'
     return Response(data)
 
+def predict(dataset: pd.DataFrame, days=90) -> pd.DataFrame:
+    m = Prophet(interval_width=0.95)
+    df_pred = pd.DataFrame()
+    df_pred['ds'] = dataset.index
+    df_pred.ds = df_pred.ds.apply(lambda x: x.date())
+    df_pred['y'] = dataset.Close.values
+    m.fit(df_pred.dropna())
+    future = m.make_future_dataframe(days)
+    forecast = m.predict(future)
+    forecast['media'] = df_pred['y'].rolling(30).mean()
+    forecast['y'] = df_pred['y']
+    forecast = forecast[['ds', 'media', 'yhat', 'yhat_upper', 'yhat_lower', 'trend', 'trend_upper', 'trend_lower', 'y']]
+    return forecast.fillna('fora do alcance')
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def predictStock(request):
+    data = []
+    if request.method == 'POST':
+        stock = request.data.get('stock')
+        print(stock)
+        df = yf.Ticker(stock).history('5y')
+        future = predict(df)
+        for i, value in future.iterrows():
+            row = {'row': i,
+                         'ds': value.ds,
+                         'yhat': value.yhat,
+                         'yhat_upper': value.yhat_upper,
+                         'yhat_lower': value.yhat_lower,
+                         'trend': value.trend,
+                         'trend_upper': value.trend_upper,
+                         'trend_lower': value.trend_lower,
+                         'y':value.y}
+            data.append(row)
+    print(data)
+    return Response(data)
 
+#IDEIA
+# FAZER A FRONTEIRA DE EFICENCIA COM AS 10 MAIS LUCRATIVAS!!!!!!!!!!!!!!!!!!
