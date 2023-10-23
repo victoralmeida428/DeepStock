@@ -63,7 +63,7 @@ class PredictStocks:
         
 
     def prepare_dataset(self):
-        self.history['mean'] = self.history.Close.rolling(30).mean()
+        self.history['mean'] = self.history.Close.rolling(7, step=7).mean()
         for i in range(1, self.n_step+1):
             self.history[f'step_{i}'] = self.history['mean'].shift(i)
 
@@ -127,7 +127,7 @@ class PredictStocks:
     
     def get_future(self):
         last_date = self.history.index[-1]
-        days_pred = [last_date + dt.timedelta(days=i*30) for i in range(7)]
+        days_pred = [last_date + dt.timedelta(days=i*7) for i in range(7)]
         
         pred = []
         x = dc(self.x_test[-1:])
