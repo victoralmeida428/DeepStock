@@ -8,8 +8,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime as dt
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from prophet import Prophet
 import pandas as pd
+from .model_torch import PredictStocks
+from rest_framework import status
 
 @api_view(['GET'])
 def get_urls(request):
@@ -57,7 +60,7 @@ def stocks(request):
     return Response(data)
 
 
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @api_view(['GET', 'POST'])
 def info_stocks(request):
     data = {}
@@ -146,6 +149,22 @@ def predictStock(request):
             data.append(row)
     print(data)
     return Response(data)
+
+class PredictionDL(APIView):
+    permission_classes = [IsAuthenticated]
+    allowed_methods = ['POST']
+
+    def post(self, form, *args, **kwargs):
+        try:
+            stock = form.data.get('stock')
+            return Response(PredictStocks(stock, 7).get_predicts())
+        except:
+            content = {'erro': 'Error for training model'}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        
+
+
 
 #IDEIA
 # FAZER A FRONTEIRA DE EFICENCIA COM AS 10 MAIS LUCRATIVAS!!!!!!!!!!!!!!!!!!

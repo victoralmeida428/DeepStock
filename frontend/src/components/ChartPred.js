@@ -1,4 +1,3 @@
-import { Container } from "react-bootstrap";
 import Plot from "react-plotly.js";
 
 export default function ChartPred({data, stock}) {
@@ -11,24 +10,34 @@ export default function ChartPred({data, stock}) {
         x: date,
         y: price,
         type: 'scatter',
-        name: 'Price'
+        name: 'Price',
+        line: {color: 'rgba(0,0,0,0.6)'}
     }, {
         x:date,
         y: trendPred,
         type: 'scatter',
-        name: 'Price Predict (trend)'
+        name: 'Price Predict (trend)',
+        line: {
+            dash: 'dash',
+        }
     }, 
     {
         x:date,
         y: pricePredUpeer,
         type: 'scatter',
-        name: 'Price Predict (Higher)'
+        name: 'Price Predict (Higher)',
+        line: {
+            dash: 'dash',
+        }
     },
     {
         x:date,
         y: pricePredLower,
         type: 'scatter',
-        name: 'Price Predict (Lower)'
+        name: 'Price Predict (Lower)',
+        line: {
+            dash: 'dash',
+        }
     }]
 
     const layout = {

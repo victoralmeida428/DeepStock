@@ -1,7 +1,7 @@
 import { legacy_createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { PredStocksReducer, favStocksReducer, favStocksUpdateReducer, infoStocksReducer, stocksCandleReducer } from './reducers/stocksReducers'
+import { PredStocksReducer, PredTorchStocksReducer, favStocksReducer, favStocksUpdateReducer, infoStocksReducer, stocksCandleReducer } from './reducers/stocksReducers'
 import { userLoginReducer } from './reducers/userReducers'
 
 const reducer = combineReducers({
@@ -10,7 +10,8 @@ const reducer = combineReducers({
     userLogin: userLoginReducer,
     favStocks: favStocksReducer,
     favStocksUpdate: favStocksUpdateReducer,
-    predStock: PredStocksReducer
+    predStock: PredStocksReducer,
+    torchPredStock: PredTorchStocksReducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?

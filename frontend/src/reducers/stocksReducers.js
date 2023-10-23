@@ -1,4 +1,4 @@
-import { CANDLE_FAIL, CANDLE_REQUEST, CANDLE_SUCCESS, FAV_STOCKS_FAIL, FAV_STOCKS_REQUEST, FAV_STOCKS_SUCCESS, FAV_STOCKS_UPDATE__FAIL, FAV_STOCKS_UPDATE__REQUEST, FAV_STOCKS_UPDATE__SUCCESS, INFO_FAIL, INFO_REQUEST, INFO_SUCCESS, PREDICT_STOCK_FAIL, PREDICT_STOCK_REQUEST, PREDICT_STOCK_SUCCESS } from "../constants/stocksConstants";
+import { CANDLE_FAIL, CANDLE_REQUEST, CANDLE_SUCCESS, FAV_STOCKS_FAIL, FAV_STOCKS_REQUEST, FAV_STOCKS_SUCCESS, FAV_STOCKS_UPDATE__FAIL, FAV_STOCKS_UPDATE__REQUEST, FAV_STOCKS_UPDATE__SUCCESS, INFO_FAIL, INFO_REQUEST, INFO_SUCCESS, PREDICT_STOCK_FAIL, PREDICT_STOCK_REQUEST, PREDICT_STOCK_SUCCESS, PREDICT_STOCK_TORCH_FAIL, PREDICT_STOCK_TORCH_REQUEST, PREDICT_STOCK_TORCH_SUCCESS } from "../constants/stocksConstants";
 
 export const stocksCandleReducer = (state={data:[]}, action) =>{
     switch (action.type){
@@ -62,6 +62,18 @@ export const PredStocksReducer = (state={data:[]}, action) => {
         case PREDICT_STOCK_SUCCESS:
             return {loading: false, data: action.payload}
         case PREDICT_STOCK_FAIL:
+            return {loading: false, error: action.payload}
+        default:
+            return state
+    }
+}
+export const PredTorchStocksReducer = (state={}, action) => {
+    switch (action.type){
+        case PREDICT_STOCK_TORCH_REQUEST:
+            return {loading: true}
+        case PREDICT_STOCK_TORCH_SUCCESS:
+            return {loading: false, data: action.payload}
+        case PREDICT_STOCK_TORCH_FAIL:
             return {loading: false, error: action.payload}
         default:
             return state

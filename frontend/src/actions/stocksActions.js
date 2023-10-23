@@ -1,4 +1,4 @@
-import {CANDLE_REQUEST, CANDLE_SUCCESS, CANDLE_FAIL, INFO_REQUEST, INFO_SUCCESS, INFO_FAIL, FAV_STOCKS_REQUEST, FAV_STOCKS_SUCCESS, FAV_STOCKS_FAIL, FAV_STOCKS_UPDATE__REQUEST, FAV_STOCKS_UPDATE__SUCCESS, FAV_STOCKS_UPDATE__FAIL, PREDICT_STOCK_REQUEST, PREDICT_STOCK_SUCCESS, PREDICT_STOCK_FAIL} from '../constants/stocksConstants'
+import {CANDLE_REQUEST, CANDLE_SUCCESS, CANDLE_FAIL, INFO_REQUEST, INFO_SUCCESS, INFO_FAIL, FAV_STOCKS_REQUEST, FAV_STOCKS_SUCCESS, FAV_STOCKS_FAIL, FAV_STOCKS_UPDATE__REQUEST, FAV_STOCKS_UPDATE__SUCCESS, FAV_STOCKS_UPDATE__FAIL, PREDICT_STOCK_REQUEST, PREDICT_STOCK_SUCCESS, PREDICT_STOCK_FAIL, PREDICT_STOCK_TORCH_REQUEST, PREDICT_STOCK_TORCH_SUCCESS, PREDICT_STOCK_TORCH_FAIL} from '../constants/stocksConstants'
 import api from '../Api'
 
 export const candleChart = (stocks, start='', end='')=> async(dispatch, getState) => {
@@ -138,6 +138,34 @@ export const predStockAction = (stock) => async (dispatch, getState) => {
         dispatch({
             type: PREDICT_STOCK_FAIL,
             error: error.response && error.response.data.detail?error.response.data.detail:error.message
+        })
+
+    }
+}
+
+export const predTorchStockAction = (stock) => async (dispatch, getState) => {
+    try{
+        dispatch({
+            type: PREDICT_STOCK_TORCH_REQUEST
+        })
+        const {userLogin:{userInfo}} = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const {data} = await api.post(`stocks/predict_torch`, {stock: stock}, config)
+        dispatch({
+            type: PREDICT_STOCK_TORCH_SUCCESS,
+            payload: data
+        })
+    }
+    catch (error) {
+        dispatch({
+            type: PREDICT_STOCK_TORCH_FAIL,
+            error: error.response && error.response.data.detail?error.response.data.detail:error.message?error.message:error
         })
 
     }
