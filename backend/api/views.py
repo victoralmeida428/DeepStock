@@ -11,7 +11,6 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from prophet import Prophet
 import pandas as pd
-from .model_torch import PredictStocks
 from rest_framework import status
 
 @api_view(['GET'])
