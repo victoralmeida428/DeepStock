@@ -149,17 +149,17 @@ def predictStock(request):
     print(data)
     return Response(data)
 
-class PredictionDL(APIView):
-    permission_classes = [IsAuthenticated]
-    allowed_methods = ['POST']
+# class PredictionDL(APIView):
+#     permission_classes = [IsAuthenticated]
+#     allowed_methods = ['POST']
 
-    def post(self, form, *args, **kwargs):
-        try:
-            stock = form.data.get('stock')
-            return Response(PredictStocks(stock, 7).get_predicts())
-        except:
-            content = {'erro': 'Error for training model'}
-            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, form, *args, **kwargs):
+#         try:
+#             stock = form.data.get('stock')
+#             return Response(PredictStocks(stock, 7).get_predicts())
+#         except:
+#             content = {'erro': 'Error for training model'}
+#             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
         
 
