@@ -16,7 +16,6 @@ export default function PredictScreen() {
     const [stock, setStock] = useState('')
 
     useEffect(() => {
-        console.log(stock);
         dispatch(predStockAction(stock))
     }, [dispatch, stock])
 
@@ -42,7 +41,7 @@ export default function PredictScreen() {
                     onChange={(e) => setStock(e? e.value: '')}>
                 </FormStocks>
 
-                {Chart()}
+                {stock?Chart():null}
                 
             </Container>
         </BaseScreen>

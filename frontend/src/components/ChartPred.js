@@ -1,6 +1,7 @@
 import Plot from "react-plotly.js";
 
 export default function ChartPred({data, stock}) {
+    if (!data.error){
     const date = data.map((e)=>e.ds)
     const price = data.map((e)=>e.y)
     const trendPred = data.map((e)=>e.trend)
@@ -65,5 +66,6 @@ export default function ChartPred({data, stock}) {
     return (
         <Plot className="mt-4 mb-2" data={traces} layout={layout}/>
     )
+}
     
 }
