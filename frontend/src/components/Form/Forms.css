@@ -6,3 +6,9 @@
     cursor: pointer;
     display: inline-block;
 }
+
+@media (max-width: 490px) {
+    .submit{
+        width: fit-content;
+    }
+    }
