@@ -127,7 +127,7 @@ def predict(dataset: pd.DataFrame, days=90) -> pd.DataFrame:
     return forecast.fillna('fora do alcance')
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def predictStock(request):
     data = []
     if request.method == 'POST':
