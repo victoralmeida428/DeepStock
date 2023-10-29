@@ -13,6 +13,6 @@ urlpatterns = [
     path('api/v1/stocksinfo', info_stocks, name='info_stocks'),
     path('api/v1/stocks/predict', predictStock, name='pred_stocks'),
     # path('api/v1/stocks/predict_torch', PredictionDL.as_view(), name='pred_stocks_torch'),
-    path('', get_urls, name='index'),
+    path('api', get_urls, name='index'),
     path('api/v1/user/login', MyTokenObtainPairView.as_view(), name='login')
 ]
