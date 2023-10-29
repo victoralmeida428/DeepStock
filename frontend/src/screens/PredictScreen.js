@@ -15,18 +15,11 @@ export default function PredictScreen() {
     const predStockDL = useSelector(state => state.torchPredStock)
     const {data, loading, error} = predStock
     const [stock, setStock] = useState('')
-    const [method, setMethod] = useState('Prophet')
 
     useEffect(() => {
-        if (method === 'Prophet') {
             dispatch(predStockAction(stock))
-        }
-        else {
-            dispatch(predTorchStockAction(stock))
-        }
-    }, [dispatch, stock, method])
+    }, [dispatch, stock])
     const Chart = ()=>{
-        if(method==='Prophet'){
             const div = 
                 loading
                     ? <Loader/>
@@ -37,54 +30,18 @@ export default function PredictScreen() {
                             </div>
             return div
         }
-        else {
-            console.log(predStockDL);
-            const div = 
-                predStockDL.loading
-                    ? <Loader/>
-                    : predStockDL.data
-                        ? <div className="d-flex justify-content-center align-items-center">
-                        <ChartTorch stock={stock} data={predStockDL.data}/>
-                    </div> : 
-                    predStockDL.error?<h3 className="text-center mt-4">{predStockDL.error}</h3>:
-                    <h3 className="text-center mt-4">Insert a ticket</h3>
-                        
-            return div
-        }
-        
-    }
+
     return (
         <BaseScreen>
             <Container>
                 <FormStocks
+                    button={false}
                     isMulti={false}
                     onChange={(e) => setStock(
                         e
                             ? e.value
                             : ''
                     )}>
-                    <Select
-                        styles={{
-                            control: (baseStyles, state) => ({
-                                ...baseStyles,
-                                width: '200px'
-                            })
-                        }}
-                        defaultValue={{
-                            value: 'Prophet',
-                            label: 'Prophet'
-                        }}
-                        options={[
-                            {
-                                value: 'Prophet',
-                                label: 'Prophet'
-                            }, {
-                                value: 'Deep Learning',
-                                label: 'Deep Learning'
-                            }
-                        ]}
-                        onChange={(e) => setMethod(e.value)}
-                        className="ms-3" ></Select>
                 </FormStocks>
 
                 {Chart()}

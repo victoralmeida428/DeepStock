@@ -23,11 +23,12 @@ export default function StocksScreen() {
     
     const submitHandler = (e) => {
         e.preventDefault()
+        if (search.length>0){
         var stocks = search.map((e)=>e.value)
         stocks = stocks.map((e)=>e.toUpperCase());
         stocks = stocks.map((e)=>e.trim());
         dispatch(candleChart(stocks.filter(item => item.trim() !== '')))
-        dispatch(infoStocksTable(stocks.filter(item => item.trim() !== '')))
+        dispatch(infoStocksTable(stocks.filter(item => item.trim() !== '')))}
     }
 
     useEffect(() => {
@@ -42,6 +43,7 @@ export default function StocksScreen() {
         <BaseScreen>
             <Container>
                 {userInfo?<FormStocks
+                                    button
                                     isMulti={true}
                                     onSubmit={submitHandler}
                                     onChange={(e) => setSearch(e)}/>:''}

@@ -1,9 +1,10 @@
-import {Col, Form, FormText, Row, Stack} from "react-bootstrap";
+import {Button, Col, Form, FormText, Row, Stack} from "react-bootstrap";
 import Creatable from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
 import { STOCKS_LIST_DEFAULT } from "../../constants/stocksConstants";
+import './Forms.css'
 
-export default function FormStocks({onChange, onSubmit, isMulti, children}) {
+export default function FormStocks({button, onChange, onSubmit, isMulti, children}) {
     const animatedComponents = makeAnimated();
     const enterHandler = (e) => {
         if (e.keyCode === 13) {
@@ -29,6 +30,7 @@ export default function FormStocks({onChange, onSubmit, isMulti, children}) {
 
                     ></Creatable>
                     {children}
+                    {button?<Button className="ms-3 submit" type="submit" variant="success">Search</Button>:null}
                     </Stack>
                 </Form>
                 
