@@ -132,7 +132,7 @@ class APIPredict(APIView):
         #                  'trend_lower': value.trend_lower,
         #                  'y':value.y}
         #     data.append(row)
-        return Response(form)
+        return Response({"DATA":form})
     
     def predict(self, days=90) -> pd.DataFrame:
         m = Prophet(interval_width=0.95)
