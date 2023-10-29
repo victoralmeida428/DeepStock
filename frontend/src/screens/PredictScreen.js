@@ -5,9 +5,8 @@ import BaseScreen from "./BaseScreen";
 import {Container, Form} from "react-bootstrap";
 import Loader from "../components/Loader";
 import FormStocks from "../components/Form/Forms";
-import ChartPred from "../components/ChartPred";
+import ChartPred from "../components/Charts/ChartPred";
 import Select from "react-select";
-import ChartTorch from "../components/ChartTorch";
 
 export default function PredictScreen() {
     const dispatch = useDispatch()

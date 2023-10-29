@@ -1,4 +1,5 @@
 import Plot from "react-plotly.js";
+import './charts.css'
 
 export default function ChartPred({data, stock}) {
     if (!data.error){
@@ -49,6 +50,8 @@ export default function ChartPred({data, stock}) {
             b: 40,
             l: 60
         },
+        width: '100%', // 100% da largura da div
+        height: '100%', // 100% da altura da div
         showlegend: true,
         xaxis: {
             autorange: true,
@@ -64,7 +67,9 @@ export default function ChartPred({data, stock}) {
         paper_bgcolor: '#cad4e3'
       };
     return (
-        <Plot className="mt-4 mb-2" data={traces} layout={layout}/>
+        <div className="mt-4 mb-2 chart-container">
+            <Plot data={traces} layout={layout}/>
+        </div>        
     )
 }
     

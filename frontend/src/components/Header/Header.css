@@ -3,9 +3,18 @@
     color: aliceblue;
     border-radius: 10px;
     font-weight: bold;
+    line-height: 0;
+    text-align: center;
 }
+
 
 .clientRegister:hover{
     background-color: var(--bs-dark-bg-subtle);
     color: var(--bs-heading-color);
+}
+
+@media (max-width: 490px) {
+    .clientRegister{
+        width: 50%;
+    }
 }

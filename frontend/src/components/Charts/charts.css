@@ -1,0 +1,10 @@
+ 
+@media (max-width: 490px) {
+.chart-container {
+    width: 100vw; /* Quando a largura da tela for igual ou inferior a 490px, use 100% da largura da janela */
+    max-width: 490px;
+}
+.js-plotly-plot .main-svg .svg-container .plot-container .plotly{
+    width: 100% !important;
+}
+}
