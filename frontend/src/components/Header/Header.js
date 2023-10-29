@@ -15,7 +15,7 @@ export default function Header(props) {
         <header>
             <Navbar expand="lg" className="bg-body-tertiary">
                 <Container>
-                    <Navbar.Brand href="/">Fincare</Navbar.Brand>
+                    <Navbar.Brand href="/">DeepStock</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-3">
