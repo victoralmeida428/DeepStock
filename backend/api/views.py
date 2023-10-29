@@ -114,11 +114,11 @@ def APIFavStockUpdate(request, pk):
 
 
 class APIPredict(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     allowed_methods = ['POST']
 
     def post(self, form, *args, **kwargs):
-        self.dataset = yf.Ticker('PETR4.SA').history('5y')
+        # self.dataset = yf.Ticker('PETR4.SA').history('5y')
         # future = self.predict()
         # data = []
         # for i, value in future.iterrows():
@@ -147,46 +147,6 @@ class APIPredict(APIView):
         forecast['y'] = df_pred['y']
         forecast = forecast[['ds', 'media', 'yhat', 'yhat_upper', 'yhat_lower', 'trend', 'trend_upper', 'trend_lower', 'y']]
         return forecast.fillna('fora do alcance')
-
-# @api_view(['POST'])
-# # @permission_classes([IsAuthenticated])
-# def predictStock(request):
-#     data = []
-#     if request.method == 'POST':
-#         data = request.data
-    #     print('-'*100)
-    #     print(request.data)
-    #     df = yf.Ticker(stock).history('5y')
-    #     future = predict(df)
-    #     for i, value in future.iterrows():
-    #         row = {'row': i,
-    #                      'ds': value.ds,
-    #                      'yhat': value.yhat,
-    #                      'yhat_upper': value.yhat_upper,
-    #                      'yhat_lower': value.yhat_lower,
-    #                      'trend': value.trend,
-    #                      'trend_upper': value.trend_upper,
-    #                      'trend_lower': value.trend_lower,
-    #                      'y':value.y}
-    #         data.append(row)
-    # print(data)
-    # return Response(data)
-
-# class PredictionDL(APIView):
-#     permission_classes = [IsAuthenticated]
-#     allowed_methods = ['POST']
-
-#     def post(self, form, *args, **kwargs):
-#         try:
-#             stock = form.data.get('stock')
-#             return Response(PredictStocks(stock, 7).get_predicts())
-#         except:
-#             content = {'erro': 'Error for training model'}
-#             return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-        
-
-
 
 #IDEIA
 # FAZER A FRONTEIRA DE EFICENCIA COM AS 10 MAIS LUCRATIVAS!!!!!!!!!!!!!!!!!!
