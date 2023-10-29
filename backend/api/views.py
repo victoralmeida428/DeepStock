@@ -118,21 +118,24 @@ class APIPredict(APIView):
     allowed_methods = ['POST']
 
     def post(self, form, *args, **kwargs):
-        # self.dataset = yf.Ticker('PETR4.SA').history('5y')
-        # future = self.predict()
-        # data = []
-        # for i, value in future.iterrows():
-        #     row = {'row': i,
-        #                  'ds': value.ds,
-        #                  'yhat': value.yhat,
-        #                  'yhat_upper': value.yhat_upper,
-        #                  'yhat_lower': value.yhat_lower,
-        #                  'trend': value.trend,
-        #                  'trend_upper': value.trend_upper,
-        #                  'trend_lower': value.trend_lower,
-        #                  'y':value.y}
-        #     data.append(row)
-        return Response({"DATA":form})
+        stock = form.data.get('stock')
+        if stock:
+            self.dataset = yf.Ticker('PETR4.SA').history('5y')
+            future = self.predict()
+            data = []
+            for i, value in future.iterrows():
+                row = {'row': i,
+                             'ds': value.ds,
+                             'yhat': value.yhat,
+                             'yhat_upper': value.yhat_upper,
+                             'yhat_lower': value.yhat_lower,
+                             'trend': value.trend,
+                             'trend_upper': value.trend_upper,
+                             'trend_lower': value.trend_lower,
+                             'y':value.y}
+                data.append(row)
+            return Response(data)
+        return Response({'error': 'No Ticket found'})
     
     def predict(self, days=90) -> pd.DataFrame:
         m = Prophet(interval_width=0.95)
