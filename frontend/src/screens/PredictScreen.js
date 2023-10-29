@@ -12,13 +12,15 @@ import ChartTorch from "../components/ChartTorch";
 export default function PredictScreen() {
     const dispatch = useDispatch()
     const predStock = useSelector(state => state.predStock)
-    const predStockDL = useSelector(state => state.torchPredStock)
     const {data, loading, error} = predStock
     const [stock, setStock] = useState('')
 
     useEffect(() => {
-            dispatch(predStockAction(stock))
+        console.log(stock);
+        dispatch(predStockAction(stock))
     }, [dispatch, stock])
+
+    
     const Chart = ()=>{
             const div = 
                 loading
@@ -37,11 +39,7 @@ export default function PredictScreen() {
                 <FormStocks
                     button={false}
                     isMulti={false}
-                    onChange={(e) => setStock(
-                        e
-                            ? e.value
-                            : ''
-                    )}>
+                    onChange={(e) => setStock(e? e.value: '')}>
                 </FormStocks>
 
                 {Chart()}
