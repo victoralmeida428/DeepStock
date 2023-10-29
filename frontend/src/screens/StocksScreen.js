@@ -33,7 +33,8 @@ export default function StocksScreen() {
     useEffect(() => {
         dispatch(candleChart(['PETR4.SA']))
         dispatch(infoStocksTable(['PETR4.SA']))
-        dispatch(favStocksAction(userInfo.id))
+        if (userInfo){
+        dispatch(favStocksAction(userInfo.id))}
     }, [dispatch])
 
 
