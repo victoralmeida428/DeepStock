@@ -132,7 +132,8 @@ def predictStock(request):
     data = []
     if request.method == 'POST':
         stock = request.data.get('stock')
-        print(stock)
+        print('-'*100)
+        print(request.data)
         df = yf.Ticker(stock).history('5y')
         future = predict(df)
         for i, value in future.iterrows():
