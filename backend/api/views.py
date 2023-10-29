@@ -112,43 +112,65 @@ def APIFavStockUpdate(request, pk):
             data['success'] = f'{stock} desfavoritado'
     return Response(data)
 
-def predict(dataset: pd.DataFrame, days=90) -> pd.DataFrame:
-    m = Prophet(interval_width=0.95)
-    df_pred = pd.DataFrame()
-    df_pred['ds'] = dataset.index
-    df_pred.ds = df_pred.ds.apply(lambda x: x.date())
-    df_pred['y'] = dataset.Close.values
-    m.fit(df_pred.dropna())
-    future = m.make_future_dataframe(days)
-    forecast = m.predict(future)
-    forecast['media'] = df_pred['y'].rolling(30).mean()
-    forecast['y'] = df_pred['y']
-    forecast = forecast[['ds', 'media', 'yhat', 'yhat_upper', 'yhat_lower', 'trend', 'trend_upper', 'trend_lower', 'y']]
-    return forecast.fillna('fora do alcance')
 
-@api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-def predictStock(request):
-    data = []
-    if request.method == 'POST':
-        stock = request.data.get('stock')
-        print('-'*100)
-        print(request.data)
-        df = yf.Ticker(stock).history('5y')
-        future = predict(df)
-        for i, value in future.iterrows():
-            row = {'row': i,
-                         'ds': value.ds,
-                         'yhat': value.yhat,
-                         'yhat_upper': value.yhat_upper,
-                         'yhat_lower': value.yhat_lower,
-                         'trend': value.trend,
-                         'trend_upper': value.trend_upper,
-                         'trend_lower': value.trend_lower,
-                         'y':value.y}
-            data.append(row)
-    print(data)
-    return Response(data)
+class APIPredict(APIView):
+    permission_classes = [IsAuthenticated]
+    allowed_methods = ['POST']
+
+    def post(self, form, *args, **kwargs):
+        self.dataset = yf.Ticker('PETR4.SA').history('5y')
+        # future = self.predict()
+        # data = []
+        # for i, value in future.iterrows():
+        #     row = {'row': i,
+        #                  'ds': value.ds,
+        #                  'yhat': value.yhat,
+        #                  'yhat_upper': value.yhat_upper,
+        #                  'yhat_lower': value.yhat_lower,
+        #                  'trend': value.trend,
+        #                  'trend_upper': value.trend_upper,
+        #                  'trend_lower': value.trend_lower,
+        #                  'y':value.y}
+        #     data.append(row)
+        return Response(form)
+    
+    def predict(self, days=90) -> pd.DataFrame:
+        m = Prophet(interval_width=0.95)
+        df_pred = pd.DataFrame()
+        df_pred['ds'] = self.dataset.index
+        df_pred.ds = df_pred.ds.apply(lambda x: x.date())
+        df_pred['y'] = self.dataset.Close.values
+        m.fit(df_pred.dropna())
+        future = m.make_future_dataframe(days)
+        forecast = m.predict(future)
+        forecast['media'] = df_pred['y'].rolling(30).mean()
+        forecast['y'] = df_pred['y']
+        forecast = forecast[['ds', 'media', 'yhat', 'yhat_upper', 'yhat_lower', 'trend', 'trend_upper', 'trend_lower', 'y']]
+        return forecast.fillna('fora do alcance')
+
+# @api_view(['POST'])
+# # @permission_classes([IsAuthenticated])
+# def predictStock(request):
+#     data = []
+#     if request.method == 'POST':
+#         data = request.data
+    #     print('-'*100)
+    #     print(request.data)
+    #     df = yf.Ticker(stock).history('5y')
+    #     future = predict(df)
+    #     for i, value in future.iterrows():
+    #         row = {'row': i,
+    #                      'ds': value.ds,
+    #                      'yhat': value.yhat,
+    #                      'yhat_upper': value.yhat_upper,
+    #                      'yhat_lower': value.yhat_lower,
+    #                      'trend': value.trend,
+    #                      'trend_upper': value.trend_upper,
+    #                      'trend_lower': value.trend_lower,
+    #                      'y':value.y}
+    #         data.append(row)
+    # print(data)
+    # return Response(data)
 
 # class PredictionDL(APIView):
 #     permission_classes = [IsAuthenticated]
