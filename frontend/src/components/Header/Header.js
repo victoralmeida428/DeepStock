@@ -13,7 +13,7 @@ export default function Header(props) {
     }
     return (
         <header>
-            <Navbar expand="lg" className="bg-body-tertiary">
+            <Navbar expand="lg" className="bg-primary" variant="dark">
                 <Container>
                     <Navbar.Brand href="/">DeepStock</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
