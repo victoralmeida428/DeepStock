@@ -30,7 +30,7 @@ export default function Header(props) {
                         </Nav>
                         <Nav className="ms-auto">
                             {userInfo?<Nav.Link href="/" onClick={logoutHandler}>Logout</Nav.Link>:<Nav.Link style={{fontWeight:'bold'}} href="/login">Login</Nav.Link>}
-                            {userInfo?'':<Nav.Link className="clientRegister" href="">Become a client !</Nav.Link>}
+                            {userInfo?'':<Nav.Link className="clientRegister" href="register">Become a client !</Nav.Link>}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

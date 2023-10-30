@@ -3,8 +3,10 @@
     color: aliceblue;
     border-radius: 10px;
     font-weight: bold;
-    line-height: 0;
+    line-height: 5px;
     text-align: center;
+    height: 3.2vh;
+    margin-top: 7px;
 }
 
 
@@ -15,6 +17,10 @@
 
 @media (max-width: 490px) {
     .clientRegister{
+        color: aliceblue;
         width: 50%;
+        height: 5vh;
+        line-height: 25px;
+        text-align: center;
     }
 }

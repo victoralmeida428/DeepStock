@@ -45,3 +45,8 @@ class FavStockSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavStocksModel
         fields = '__all__'
+
+class UserRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'username')

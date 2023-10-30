@@ -4,6 +4,7 @@ import HomeScreen from "./screens/HomeScreeen";
 import './App.css'
 import StocksScreen from "./screens/StocksScreen";
 import PredictScreen from "./screens/PredictScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 
 
 
@@ -15,6 +16,7 @@ function AppRoutes() {
                 <Route path="/" element={<HomeScreen/>}></Route>
                 <Route path="/stocks" element={<StocksScreen />}></Route>
                 <Route path="/stockspred" element={<PredictScreen />}></Route>
+                <Route path="/register" element={<RegisterScreen />}></Route>
             </Routes>
         </BrowserRouter>
     )

@@ -7,7 +7,7 @@ from .serializer import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime as dt
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.views import APIView
 from prophet import Prophet
 import pandas as pd
@@ -150,6 +150,24 @@ class APIPredict(APIView):
         forecast['y'] = df_pred['y']
         forecast = forecast[['ds', 'media', 'yhat', 'yhat_upper', 'yhat_lower', 'trend', 'trend_upper', 'trend_lower', 'y']]
         return forecast.fillna('fora do alcance')
+
+class APIVerifierAccount(ModelViewSet):
+    serializer_class = UserRegisterSerializer
+    queryset = User.objects.all()
+    
+
+class APIRegister(APIView):
+
+    def post(self, form, *args, **kwargs):
+        data = form.data
+        try:
+            User.objects.create_user(username=data.get('username'),
+                                email=data.get('email'),
+                                password=data.get('password')
+                                )
+            return Response({'success':'Account Created!'})
+        except:
+            return Response({'error':'Account not created'})
 
 #IDEIA
 # FAZER A FRONTEIRA DE EFICENCIA COM AS 10 MAIS LUCRATIVAS!!!!!!!!!!!!!!!!!!
