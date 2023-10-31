@@ -1,6 +1,6 @@
 .clientRegister{
-    background-color: rgb(49, 49, 129);
-    color: aliceblue;
+    background-color: rgb(247, 255, 140);
+    color: black;
     border-radius: 10px;
     font-weight: bold;
     line-height: 5px;
@@ -11,8 +11,8 @@
 
 
 .clientRegister:hover{
-    background-color: var(--bs-dark-bg-subtle);
-    color: var(--bs-heading-color);
+    background-color: rgb(255, 211, 161);
+    color: black;
 }
 
 @media (max-width: 490px) {

@@ -2,7 +2,6 @@ import { Alert, Button, Form, Row } from 'react-bootstrap'
 import * as formik from 'formik';
 import * as yup from 'yup';
 import './FormRegister.css'
-import { email_val, password_val } from './Validation';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, registerAccountAction, verifierAccountAction } from '../../actions/userActions';
 import { useNavigate } from "react-router-dom";
@@ -29,7 +28,6 @@ export default function FormRegister() {
             return regex.test(value)
           }),
         confirm: yup.string().required(''),
-        terms: yup.bool().required().oneOf([true], 'Terms must be accepted'),
       });
       const handlerSubmit = (form)=>{
         dispatch(verifierAccountAction(form.username, form.email))
@@ -63,7 +61,6 @@ export default function FormRegister() {
         username: '',
         password: '',
         confirm: '',
-        terms: false,
       }}>
          {({ handleSubmit, handleChange, values, touched, errors }) => (
             <Form noValidate onSubmit={handleSubmit}>
@@ -90,6 +87,7 @@ export default function FormRegister() {
                         type="email"
                         name="email"
                         value={values.email}
+                        placeholder='email@email.com'
                         onChange={handleChange}
                         isValid={touched.email && !errors.email}
                         onBlur={(e)=>{verifierAccountAction(values.username, values.email)}}
@@ -141,19 +139,7 @@ export default function FormRegister() {
                     />
                 </Row>
                 <Row className="mb-3">
-                    <Form.Check
-                    required
-                    name="terms"
-                    label="Agree to terms and conditions"
-                    onChange={handleChange}
-                    isInvalid={!!errors.terms}
-                    feedback={errors.terms}
-                    feedbackType="invalid"
-                    id="validationFormik0"
-                    />
-                </Row>
-                <Row className="mb-3">
-                <Button type='submit' onClick={handleSubmit} variant='success'>Register</Button>
+                <Button type='submit' onClick={handleSubmit} variant='primary'>Register</Button>
                 </Row>
                 
 
