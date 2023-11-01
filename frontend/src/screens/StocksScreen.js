@@ -32,12 +32,13 @@ export default function StocksScreen() {
     }
 
     useEffect(() => {
+        
+        if (userInfo){
         dispatch(candleChart(['PETR4.SA']))
         dispatch(infoStocksTable(['PETR4.SA']))
-        if (userInfo){
         dispatch(favStocksAction(userInfo.id))}
-    }, [dispatch])
 
+    }, [dispatch])
 
     return (
         <BaseScreen>
@@ -55,7 +56,7 @@ export default function StocksScreen() {
                         : <>
                                 
                                     {infoReducer.loading?<Loader />:
-                                    <TableInfo favs={favReducer&&favReducer.data?favReducer.data.map((e)=>e.stock):['']} data={infoReducer.data.data?infoReducer.data.data:[{'info':1}]}/>}
+                                    <TableInfo favs={favReducer&&favReducer.data?favReducer.data.map((e)=>e.stock):['']} data={infoReducer&&infoReducer.data?infoReducer.data:[{'info':1}]}/>}
                                     <CandleStick data={data}/>
                             </>
 

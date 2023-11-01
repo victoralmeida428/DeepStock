@@ -16,7 +16,7 @@ export const stocksCandleReducer = (state={data:[]}, action) =>{
     }
 }
 
-export const infoStocksReducer = (state={data:[]}, action) => {
+export const infoStocksReducer = (state={}, action) => {
     switch (action.type){
         case INFO_REQUEST:
             return {loading: true}

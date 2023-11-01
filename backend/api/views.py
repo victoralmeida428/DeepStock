@@ -39,7 +39,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def stocks(request):
     data = []
     if request.method == 'POST':
@@ -59,32 +59,75 @@ def stocks(request):
     return Response(data)
 
 
-@permission_classes([IsAuthenticated])
-@api_view(['GET', 'POST'])
-def info_stocks(request):
-    data = {}
-    lista = []
-    name_info = {'longName': 'Name', 'marketCap': 'Market Cap', 'totalDebt': 'Total Debt',
-                     'enterpriseValue':'Enterprise Value',
-                     'ebitda': 'EBITDA', 'enterpriseToEbitda':'EV EBITDA', 'trailingEps': 'Trailing Eps', 'floatShares': 'Float Shares',
-                     'sharesOutstanding':'Shares Outstanding', 'previousClose':'Previous Close',
-                     'governanceEpochDate': 'Governance Epoch Date'}
-    infos = []
-    if request.method == 'POST':
-        for stock in request.data.get('stocks'):
-            if not str(stock).startswith('^'):
-                ticker = yf.Ticker(stock)
-                ticker.info['governanceEpochDate'] = dt.datetime.fromtimestamp(ticker.info.get('governanceEpochDate',11111111111)).strftime("%d/%m/%Y") if ticker.info.get('governanceEpochDate',False) else None
-                infos.append((stock, ticker.info))
+class InfoStocks(APIView):
+    allowed_methods = ['POST']
+
+    def post(self, form, *args, **kwargs):
+        data = {}
+        lista = []
+        name_info = {'longName': 'Name', 'marketCap': 'Market Cap', 'totalDebt': 'Total Debt',
+                    'enterpriseValue':'Enterprise Value',
+                    'ebitda': 'EBITDA', 'enterpriseToEbitda':'EV EBITDA', 'trailingEps': 'Trailing Eps', 'floatShares': 'Float Shares',
+                    'sharesOutstanding':'Shares Outstanding', 'previousClose':'Previous Close',
+                    'governanceEpochDate': 'Governance Epoch Date'}
+        infos = []
+        
+        for stock in form.data.get('stocks'):
+            try:
+                if not str(stock).startswith('^'):
+                    ticker = yf.Ticker(stock)
+                    ticker.info['governanceEpochDate'] = dt.datetime.fromtimestamp(ticker.info.get('governanceEpochDate',1050)).strftime("%d/%m/%Y")
+                    infos.append((stock, ticker.info))
+                
             
-            
-        for key, value in name_info.items():
-            dic = {'Informations': value}
-            for (stock, info) in infos:
-                    dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
-            lista.append(dic)
-        data['data'] = lista
-    return Response(data)
+                for key, value in name_info.items():
+                    dic = {'Informations': value}
+                    for (stock, info) in infos:
+                            dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
+                    lista.append(dic)
+
+            except:
+                info = self.return_items(stock)
+                data = [{'Informations':key, stock:value} for key, value in info.items()]
+                            
+        return Response(data)
+
+
+    def return_items(self, stock: str='PETR4.SA')->dict:
+        ticket = yf.Ticker(stock)
+        cash_flow = ticket.cash_flow
+        coluna = cash_flow.columns[0]
+        fast_info = ticket.fast_info
+        income = ticket.quarterly_income_stmt
+        balance = ticket.quarterly_balance_sheet
+        financial = ticket.quarterly_financials
+        total_assets = balance.loc['Total Assets', coluna]
+        preco = fast_info.get('marketCap')
+        ebitda = income.loc['EBITDA', coluna]
+        return dict(
+            curency=ticket.fast_info.get('currency'),
+            last_balance=coluna,
+            capex=cash_flow.loc['Capital Expenditure', coluna],
+            market_cap=fast_info.get('marketCap'),       
+            ebitda = ebitda,
+            patrimonio_liquido = balance.loc['Stockholders Equity', coluna],
+            capital_social = balance.loc['Capital Stock', coluna],
+            lucro_liquido = financial.loc['Net Income', coluna],
+            preco_cashflow = preco/cash_flow.loc['Free Cash Flow', coluna],
+            preco_ebitda = preco/ebitda,
+            giro_ativo = financial.loc['Total Revenue', coluna]/total_assets,
+            preco_por_valor = preco/total_assets,
+            capital_giro = balance.loc['Working Capital', coluna],
+            divida = balance.loc['Total Debt', coluna],
+            divida_liquida = balance.loc['Net Debt', coluna],
+            divida_ebitda =  balance.loc['Net Debt', coluna]/financial.loc['EBITDA', coluna],
+            ativos = total_assets,
+            ativos_circulantes = balance.loc['Current Assets', coluna],
+            ativos_nao_circulantes = balance.loc['Total Non Current Assets', coluna],
+            fluxo_caixa_livre = cash_flow.loc['Free Cash Flow', coluna]
+            )
+
+
 
 class APIFavStock(ModelViewSet):
     serializer_class = FavStockSerializer

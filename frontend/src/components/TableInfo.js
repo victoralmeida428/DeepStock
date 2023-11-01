@@ -7,8 +7,7 @@ export default function TableInfo({ data, favs }) {
     const dispatch = useDispatch()
     const loginReducer = useSelector(state => state.userLogin)
     const {userInfo} = loginReducer
-    const infoReducer = useSelector(state => state.infoStocks)
-    const updateFav = useSelector(state => state.favStocksUpdate)
+    console.log('Aqui --> ', data);
     const keys = Object.keys(data[0])
 
 

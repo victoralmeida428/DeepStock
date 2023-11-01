@@ -13,7 +13,7 @@ urlpatterns = [
     path('api/v1/stocks', stocks, name='stocks'),
     path('api/v1/stocks/<pk>/fav/update', APIFavStockUpdate, name='updateFav'),
     path('api/v1/stocks/<pk>/', include(router.urls)),
-    path('api/v1/stocksinfo', info_stocks, name='info_stocks'),
+    path('api/v1/stocksinfo', InfoStocks.as_view(), name='info_stocks'),
     path('api/v1/stocks/predict', APIPredict.as_view(), name='pred_stocks'),
     path('api/v1/user/', include(user.urls)),
     path('api', get_urls, name='index'),
