@@ -4,7 +4,7 @@ export default function InformationScreen() {
     return (
         <BaseScreen>
         <div className="mt-5 text-center" style={{fontSize:'50px', fontWeight:'bolder'}}>
-            IN WORKING <i class="fa-solid fa-hammer" style={{color: "#a1aa22"}}></i>
+            WORKING IN PROGRESS <i class="fa-solid fa-hammer" style={{color: "#a1aa22"}}></i>
         </div>
         </BaseScreen>
     )
