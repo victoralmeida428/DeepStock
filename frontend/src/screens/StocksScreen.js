@@ -60,7 +60,7 @@ export default function StocksScreen() {
                                     <CandleStick data={data}/>
                             </>
 
-                    : <Message variant='light'>Please, make
+                    : <Message variant='secondary'>Please, make
                             <a className="ms-1" href="/login">login</a>
                         </Message>
             }

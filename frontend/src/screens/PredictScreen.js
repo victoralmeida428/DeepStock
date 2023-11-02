@@ -6,13 +6,16 @@ import {Container, Form} from "react-bootstrap";
 import Loader from "../components/Loader";
 import FormStocks from "../components/Form/Forms";
 import ChartPred from "../components/Charts/ChartPred";
-import Select from "react-select";
+import Message from "../components/Message";
 
 export default function PredictScreen() {
     const dispatch = useDispatch()
     const predStock = useSelector(state => state.predStock)
-    const {data, loading, error} = predStock
+    const {data, loading} = predStock
     const [stock, setStock] = useState('')
+    const loginReducer = useSelector(state => state.userLogin)
+    const {userInfo} = loginReducer
+
 
     useEffect(() => {
         dispatch(predStockAction(stock))
@@ -30,17 +33,19 @@ export default function PredictScreen() {
                             </div>
             return div
         }
-
+    const chart = stock? Chart():null
+    console.log(userInfo);
     return (
         <BaseScreen>
             <Container>
+                {!userInfo?<Message variant='secondary'>Please, make <a href="login">login</a></Message>:null}
                 <FormStocks
                     button={false}
                     isMulti={false}
                     onChange={(e) => setStock(e? e.value: '')}>
                 </FormStocks>
+                {chart}
 
-                {stock?Chart():null}
                 
             </Container>
         </BaseScreen>
