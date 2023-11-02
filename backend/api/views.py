@@ -71,26 +71,40 @@ class InfoStocks(APIView):
                     'sharesOutstanding':'Shares Outstanding', 'previousClose':'Previous Close',
                     'governanceEpochDate': 'Governance Epoch Date'}
         infos = []
-        
-        for stock in form.data.get('stocks'):
-            try:
-                if not str(stock).startswith('^'):
-                    ticker = yf.Ticker(stock)
-                    ticker.info['governanceEpochDate'] = dt.datetime.fromtimestamp(ticker.info.get('governanceEpochDate',1050)).strftime("%d/%m/%Y")
-                    infos.append((stock, ticker.info))
+        try:
+            for stock in form.data.get('stocks'):
                 
-            
-                for key, value in name_info.items():
-                    dic = {'Informations': value}
-                    for (stock, info) in infos:
-                            dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
-                    lista.append(dic)
+                    if not str(stock).startswith('^'):
+                        ticker = yf.Ticker(stock)
+                        ticker.info['governanceEpochDate'] = dt.datetime.fromtimestamp(ticker.info.get('governanceEpochDate',1050)).strftime("%d/%m/%Y")
+                        infos.append((stock, ticker.info))
+                    
+                
+            for key, value in name_info.items():
+                dic = {'Informations': value}
+                for (stock, info) in infos:
+                        dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
+                lista.append(dic)
+            return Response(lista)
 
-            except:
-                info = self.return_items(stock)
-                data = [{'Informations':key, stock:value} for key, value in info.items()]
-                            
-        return Response(data)
+        except:
+            for stock in form.data.get('stocks'):
+                if not str(stock).startswith('^'):
+                    info = self.return_items(stock)
+                    infos.append((stock, info))
+            
+            for key, value in infos[0][1].items():
+                dic = {'Informations': ' '.join(key.replace('por', '/').split('_')).title()}
+                for (stock, info) in infos:
+                        dic[stock]= f'{info.get(key):,}'  if (isinstance(info.get(key), int)|isinstance(info.get(key), float)) else info.get(key)
+                lista.append(dic)
+            return Response(lista)
+
+            
+
+            data = [{'Informations':' '.join(str(key).replace('por', '/').split('_')).title(), stock:f'{value:,.3f}'} if isinstance(value, (int,float)) else value for key, value in info.items()]
+                                
+            return Response(data)
 
 
     def return_items(self, stock: str='PETR4.SA')->dict:
@@ -110,21 +124,21 @@ class InfoStocks(APIView):
             capex=cash_flow.loc['Capital Expenditure', coluna],
             market_cap=fast_info.get('marketCap'),       
             ebitda = ebitda,
-            patrimonio_liquido = balance.loc['Stockholders Equity', coluna],
-            capital_social = balance.loc['Capital Stock', coluna],
-            lucro_liquido = financial.loc['Net Income', coluna],
-            preco_cashflow = preco/cash_flow.loc['Free Cash Flow', coluna],
-            preco_ebitda = preco/ebitda,
-            giro_ativo = financial.loc['Total Revenue', coluna]/total_assets,
-            preco_por_valor = preco/total_assets,
-            capital_giro = balance.loc['Working Capital', coluna],
-            divida = balance.loc['Total Debt', coluna],
-            divida_liquida = balance.loc['Net Debt', coluna],
-            divida_ebitda =  balance.loc['Net Debt', coluna]/financial.loc['EBITDA', coluna],
-            ativos = total_assets,
-            ativos_circulantes = balance.loc['Current Assets', coluna],
-            ativos_nao_circulantes = balance.loc['Total Non Current Assets', coluna],
-            fluxo_caixa_livre = cash_flow.loc['Free Cash Flow', coluna]
+            stockholders_equity = balance.loc['Stockholders Equity', coluna],
+            capital_stock = balance.loc['Capital Stock', coluna],
+            net_income = financial.loc['Net Income', coluna],
+            price_por_free_cash_flow = preco/cash_flow.loc['Free Cash Flow', coluna],
+            price_por_ebitda = preco/ebitda,
+            asset_turnover = financial.loc['Total Revenue', coluna]/total_assets,
+            price_por_value = preco/total_assets,
+            working_capital = balance.loc['Working Capital', coluna],
+            total_debt = balance.loc['Total Debt', coluna],
+            net_debt = balance.loc['Net Debt', coluna],
+            net_debt_por_ebitda =  balance.loc['Net Debt', coluna]/financial.loc['EBITDA', coluna],
+            total_assets = total_assets,
+            currents_assets = balance.loc['Current Assets', coluna],
+            total_non_current_assets = balance.loc['Total Non Current Assets', coluna],
+            free_cash_flow = cash_flow.loc['Free Cash Flow', coluna]
             )
 
 
