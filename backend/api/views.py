@@ -109,40 +109,38 @@ class InfoStocks(APIView):
 
     def return_items(self, stock: str='PETR4.SA')->dict:
         ticket = yf.Ticker(stock)
-        cash_flow = ticket.cash_flow
-        coluna = cash_flow.columns[0]
-        fast_info = ticket.fast_info
-        income = ticket.quarterly_income_stmt
-        balance = ticket.quarterly_balance_sheet
-        financial = ticket.quarterly_financials
-        total_assets = balance.loc['Total Assets', coluna]
-        preco = fast_info.get('marketCap')
-        try:
-            ebitda = income.loc['EBITDA', coluna]
-        except:
-            ebitda = None
-        return dict(
-            curency=ticket.fast_info.get('currency'),
-            last_balance=coluna,
-            capex=cash_flow.loc['Capital Expenditure', coluna],
-            market_cap=fast_info.get('marketCap'),       
-            ebitda = ebitda,
-            stockholders_equity = balance.loc['Stockholders Equity', coluna],
-            capital_stock = balance.loc['Capital Stock', coluna],
-            net_income = financial.loc['Net Income', coluna],
-            price_por_free_cash_flow = preco/cash_flow.loc['Free Cash Flow', coluna],
-            price_por_ebitda = preco/ebitda if ebitda else None,
-            asset_turnover = financial.loc['Total Revenue', coluna]/total_assets,
-            price_por_value = preco/total_assets,
-            working_capital = balance.loc['Working Capital', coluna],
-            total_debt = balance.loc['Total Debt', coluna],
-            net_debt = balance.loc['Net Debt', coluna],
-            net_debt_por_ebitda =  balance.loc['Net Debt', coluna]/ebitda if ebitda else None,
-            total_assets = total_assets,
-            currents_assets = balance.loc['Current Assets', coluna],
-            total_non_current_assets = balance.loc['Total Non Current Assets', coluna],
-            free_cash_flow = cash_flow.loc['Free Cash Flow', coluna]
-            )
+        if ticket:
+            cash_flow = ticket.cash_flow
+            coluna = cash_flow.columns[0]
+            fast_info = ticket.fast_info
+            income = ticket.quarterly_income_stmt.reset_index(names=['info'])
+            balance = ticket.quarterly_balance_sheet.reset_index(names=['info'])
+            financial = ticket.quarterly_financials.reset_index(names=['info'])
+            total_assets = balance.loc[balance['info']=='Total Assets', coluna]
+            preco = fast_info.get('marketCap')
+            ebitda = income.loc[income['info']=='EBITDA', coluna]
+            return dict(
+                curency=ticket.fast_info.get('currency'),
+                last_balance=coluna,
+                capex=cash_flow.loc[cash_flow['info']=='Capital Expenditure', coluna],
+                market_cap=fast_info.get('marketCap'),       
+                ebitda = ebitda,
+                stockholders_equity = balance.loc[balance['info']=='Stockholders Equity', coluna],
+                capital_stock = balance.loc[balance['info']=='Capital Stock', coluna],
+                net_income = financial.loc[financial['info']=='Net Income', coluna],
+                price_por_free_cash_flow = preco/cash_flow.loc[cash_flow['info']=='Free Cash Flow', coluna],
+                price_por_ebitda = preco/ebitda if ebitda else None,
+                asset_turnover = financial.loc[financial['info']=='Total Revenue', coluna]/total_assets,
+                price_por_value = preco/total_assets,
+                working_capital = balance.loc[balance['info']=='Working Capital', coluna],
+                total_debt = balance.loc[balance['info']=='Total Debt', coluna],
+                net_debt = balance.loc[balance['info']=='Net Debt', coluna],
+                net_debt_por_ebitda =  balance.loc[balance['info']=='Net Debt', coluna]/ebitda if ebitda else None,
+                total_assets = total_assets,
+                currents_assets = balance.loc[balance['info']=='Current Assets', coluna],
+                total_non_current_assets = balance.loc[balance['info']=='Total Non Current Assets', coluna],
+                free_cash_flow = cash_flow.loc[cash_flow['info']=='Free Cash Flow', coluna]
+                )
 
 
 
