@@ -24,7 +24,7 @@ export default function Header(props) {
                             <NavDropdown title="Products" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="stockspred">Predic's Stocks</NavDropdown.Item>
                                 {/* <NavDropdown.Item href="#action/3.2">Satistical</NavDropdown.Item> */}
-                                <NavDropdown.Item href="#action/3.3">Informations</NavDropdown.Item>
+                                <NavDropdown.Item href="informations">Informations</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                         <Nav className="ms-auto">

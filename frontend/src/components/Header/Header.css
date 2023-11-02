@@ -1,4 +1,4 @@
-.clientRegister{
+.clientRegister {
     background-color: rgb(247, 255, 140);
     color: black;
     border-radius: 10px;
@@ -9,14 +9,24 @@
     margin-top: 7px;
 }
 
+.navbar-brand:hover {
+    cursor: default;
+    color: white;
+}
 
-.clientRegister:hover{
+.clientRegister:hover {
     background-color: rgb(255, 211, 161);
     color: black;
 }
 
 @media (max-width: 490px) {
-    .clientRegister{
+
+    .navbar-brand:hover {
+        cursor: default;
+        color: white;
+    }
+
+    .clientRegister {
         color: black;
         width: 50%;
         height: 5vh;
