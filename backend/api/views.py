@@ -110,8 +110,8 @@ class InfoStocks(APIView):
     def return_items(self, stock: str='PETR4.SA')->dict:
         ticket = yf.Ticker(stock)
         if ticket:
-            cash_flow = ticket.cash_flow
-            coluna = cash_flow.columns[0]
+            cash_flow = ticket.cash_flow.reset_index(names=['info'])
+            coluna = cash_flow.columns[1]
             fast_info = ticket.fast_info
             income = ticket.quarterly_income_stmt.reset_index(names=['info'])
             balance = ticket.quarterly_balance_sheet.reset_index(names=['info'])
