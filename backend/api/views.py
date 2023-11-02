@@ -117,7 +117,10 @@ class InfoStocks(APIView):
         financial = ticket.quarterly_financials
         total_assets = balance.loc['Total Assets', coluna]
         preco = fast_info.get('marketCap')
-        ebitda = income.loc['EBITDA', coluna]
+        try:
+            ebitda = income.loc['EBITDA', coluna]
+        except:
+            ebitda = None
         return dict(
             curency=ticket.fast_info.get('currency'),
             last_balance=coluna,
@@ -128,13 +131,13 @@ class InfoStocks(APIView):
             capital_stock = balance.loc['Capital Stock', coluna],
             net_income = financial.loc['Net Income', coluna],
             price_por_free_cash_flow = preco/cash_flow.loc['Free Cash Flow', coluna],
-            price_por_ebitda = preco/ebitda,
+            price_por_ebitda = preco/ebitda if ebitda else None,
             asset_turnover = financial.loc['Total Revenue', coluna]/total_assets,
             price_por_value = preco/total_assets,
             working_capital = balance.loc['Working Capital', coluna],
             total_debt = balance.loc['Total Debt', coluna],
             net_debt = balance.loc['Net Debt', coluna],
-            net_debt_por_ebitda =  balance.loc['Net Debt', coluna]/financial.loc['EBITDA', coluna],
+            net_debt_por_ebitda =  balance.loc['Net Debt', coluna]/ebitda if ebitda else None,
             total_assets = total_assets,
             currents_assets = balance.loc['Current Assets', coluna],
             total_non_current_assets = balance.loc['Total Non Current Assets', coluna],
