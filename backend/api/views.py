@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from prophet import Prophet
 import pandas as pd
 from rest_framework import status
+import numpy as np
 
 @api_view(['GET'])
 def get_urls(request):
@@ -63,7 +64,6 @@ class InfoStocks(APIView):
     allowed_methods = ['POST']
 
     def post(self, form, *args, **kwargs):
-        data = {}
         lista = []
         name_info = {'longName': 'Name', 'marketCap': 'Market Cap', 'totalDebt': 'Total Debt',
                     'enterpriseValue':'Enterprise Value',
@@ -100,46 +100,52 @@ class InfoStocks(APIView):
                 lista.append(dic)
             return Response(lista)
 
-            
-
-            data = [{'Informations':' '.join(str(key).replace('por', '/').split('_')).title(), stock:f'{value:,.3f}'} if isinstance(value, (int,float)) else value for key, value in info.items()]
-                                
-            return Response(data)
-
-
     def return_items(self, stock: str='PETR4.SA')->dict:
         ticket = yf.Ticker(stock)
         if ticket:
-            cash_flow = ticket.cash_flow.reset_index(names=['info'])
-            coluna = cash_flow.columns[1]
+            
             fast_info = ticket.fast_info
-            income = ticket.quarterly_income_stmt.reset_index(names=['info'])
-            balance = ticket.quarterly_balance_sheet.reset_index(names=['info'])
-            financial = ticket.quarterly_financials.reset_index(names=['info'])
+            cash_flow = ticket.cash_flow.reset_index(names=['info']).fillna('-')
+            coluna = cash_flow.columns[1]
+            income = ticket.quarterly_income_stmt.reset_index(names=['info']).fillna('-')
+            balance = ticket.quarterly_balance_sheet.reset_index(names=['info']).fillna('-')
+            financial = ticket.quarterly_financials.reset_index(names=['info']).fillna('-')
             total_assets = balance.loc[balance['info']=='Total Assets', coluna]
             preco = fast_info.get('marketCap')
             ebitda = income.loc[income['info']=='EBITDA', coluna]
+            def tratar_valor(x, y=None):
+                try:
+                    if isinstance(x, pd.Series):
+                        x = x.values[0] 
+                    if isinstance(y, pd.Series):
+                        y = y.values[0] 
+                    if y:
+                        return x/y
+                    else:
+                         return x
+                except Exception as error:
+                    return '-'
             return dict(
                 curency=ticket.fast_info.get('currency'),
                 last_balance=coluna,
-                capex=cash_flow.loc[cash_flow['info']=='Capital Expenditure', coluna],
+                capex=tratar_valor(cash_flow.loc[cash_flow['info'] == 'Capital Expenditure', coluna]),
                 market_cap=fast_info.get('marketCap'),       
-                ebitda = ebitda,
-                stockholders_equity = balance.loc[balance['info']=='Stockholders Equity', coluna],
-                capital_stock = balance.loc[balance['info']=='Capital Stock', coluna],
-                net_income = financial.loc[financial['info']=='Net Income', coluna],
-                price_por_free_cash_flow = preco/cash_flow.loc[cash_flow['info']=='Free Cash Flow', coluna],
-                price_por_ebitda = preco/ebitda if ebitda else None,
-                asset_turnover = financial.loc[financial['info']=='Total Revenue', coluna]/total_assets,
-                price_por_value = preco/total_assets,
-                working_capital = balance.loc[balance['info']=='Working Capital', coluna],
-                total_debt = balance.loc[balance['info']=='Total Debt', coluna],
-                net_debt = balance.loc[balance['info']=='Net Debt', coluna],
-                net_debt_por_ebitda =  balance.loc[balance['info']=='Net Debt', coluna]/ebitda if ebitda else None,
-                total_assets = total_assets,
-                currents_assets = balance.loc[balance['info']=='Current Assets', coluna],
-                total_non_current_assets = balance.loc[balance['info']=='Total Non Current Assets', coluna],
-                free_cash_flow = cash_flow.loc[cash_flow['info']=='Free Cash Flow', coluna]
+                ebitda = tratar_valor(ebitda),
+                stockholders_equity = tratar_valor(balance.loc[balance['info'] == 'Stockholders Equity', coluna]),
+                capital_stock = tratar_valor(balance.loc[balance['info'] == 'Capital Stock', coluna]),
+                net_income = tratar_valor(financial.loc[financial['info'] == 'Net Income', coluna]),
+                price_por_free_cash_flow = tratar_valor(preco,cash_flow.loc[cash_flow['info'] == 'Free Cash Flow', coluna]),
+                price_por_ebitda = tratar_valor(preco,ebitda),
+                asset_turnover = tratar_valor(financial.loc[financial['info'] == 'Total Revenue', coluna],total_assets),
+                price_por_value = tratar_valor(preco,total_assets),
+                working_capital = tratar_valor(balance.loc[balance['info'] == 'Working Capital', coluna]),
+                total_debt = tratar_valor(balance.loc[balance['info'] == 'Total Debt', coluna]),
+                net_debt = tratar_valor(balance.loc[balance['info'] == 'Net Debt', coluna]),
+                net_debt_por_ebitda =  tratar_valor(balance.loc[balance['info'] == 'Net Debt', coluna],ebitda ),
+                total_assets = tratar_valor(total_assets),
+                currents_assets = tratar_valor(balance.loc[balance['info'] == 'Current Assets', coluna]),
+                total_non_current_assets = tratar_valor(balance.loc[balance['info'] == 'Total Non Current Assets', coluna]),
+                free_cash_flow = tratar_valor(cash_flow.loc[cash_flow['info'] == 'Free Cash Flow', coluna])
                 )
 
 
