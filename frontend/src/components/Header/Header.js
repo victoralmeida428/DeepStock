@@ -20,11 +20,10 @@ export default function Header(props) {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-3">
                             <Nav.Link href="/">Home</Nav.Link>
-                            <Nav.Link href="#link">About</Nav.Link>
                             <Nav.Link href="/stocks">Stocks</Nav.Link>
                             <NavDropdown title="Products" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="stockspred">Predic's Stocks</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Satistical</NavDropdown.Item>
+                                {/* <NavDropdown.Item href="#action/3.2">Satistical</NavDropdown.Item> */}
                                 <NavDropdown.Item href="#action/3.3">Informations</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
