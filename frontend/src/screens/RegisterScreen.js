@@ -4,6 +4,7 @@ import BaseScreen from "./BaseScreen";
 import { useSelector } from "react-redux";
 import FormConfirmation from "../components/FormRegister/FormConfirmation";
 import { useState } from "react";
+import Loader from "../components/Loader";
 
 export default function RegisterScreen() {
     const code = useSelector(state => state.codeRegister)
@@ -11,7 +12,8 @@ export default function RegisterScreen() {
         <BaseScreen>
             <Stack className="mt-3">
                 <h3>Register</h3>
-                {!code.data?<FormRegister/>:<FormConfirmation/>}
+                {code.loading?<Loader />:
+                !code.data?<FormRegister/>:<FormConfirmation/>}
             </Stack>
         </BaseScreen>
     )
