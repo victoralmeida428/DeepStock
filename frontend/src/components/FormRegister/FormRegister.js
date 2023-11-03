@@ -3,15 +3,21 @@ import * as formik from 'formik';
 import * as yup from 'yup';
 import './FormRegister.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { login, registerAccountAction, verifierAccountAction } from '../../actions/userActions';
+import { codeAccountAction, login, registerAccountAction, verifierAccountAction } from '../../actions/userActions';
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function FormRegister() {
+export default function FormRegister(props) {
     const dispatch = useDispatch()
     const verifier = useSelector(state => state.userVerifier)
+    const codeRegister = useSelector(state => state.codeRegister)
     const history = useNavigate()
     const [error, setError] = useState('')
+    const [send, setSend] = useState('')
+
+    useEffect(()=>{
+        dispatch(verifierAccountAction())
+    }, dispatch)
 
     const { Formik } = formik;
     const schema = yup.object().shape({
@@ -30,25 +36,23 @@ export default function FormRegister() {
         confirm: yup.string().required(''),
       });
       const handlerSubmit = (form)=>{
-        dispatch(verifierAccountAction(form.username, form.email))
-        setTimeout(()=>{
-            if (verifier && verifier.data ){
+        
+            if (verifier.error){
+                setError(verifier.error)
+            }
+            else if (verifier.data ){
                 const emails = verifier.data.map((e)=>e.email)
                 const users = verifier.data.map((e)=>e.username)
+                console.log(!emails.includes(form.email) && !users.includes(form.username))
+                console.log(emails.includes(form.email), users.includes(form.username));
                 if (!emails.includes(form.email) && !users.includes(form.username)){
-                    dispatch(registerAccountAction(form.username, form.email, form.password))
-                    setInterval(()=>{
-                        dispatch(login(form.username, form.password))
-                        history('/')
-                    }, 600)
+                    dispatch(codeAccountAction(form.username, form.name, form.email, form.password))
 
-                    
                 }
             }
-            else {
-                setError('An account already exists, register another email or another user')
+            else{
+                setError('error')
             }
-        }, 400)
         
       }
     return (
@@ -64,6 +68,7 @@ export default function FormRegister() {
       }}>
          {({ handleSubmit, handleChange, values, touched, errors }) => (
             <Form noValidate onSubmit={handleSubmit}>
+                
                 {error?<Alert variant='danger'>{error}</Alert>:null}
                 <Row className="mb-3">
                 

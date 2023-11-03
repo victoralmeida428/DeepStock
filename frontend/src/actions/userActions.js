@@ -1,5 +1,5 @@
 import api from "../Api"
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_VERIFIER_FAIL, USER_VERIFIER_REQUEST, USER_VERIFIER_SUCCESS } from "../constants/userConstants"
+import { CODE_REGISTER_FAIL, CODE_REGISTER_REQUEST, CODE_REGISTER_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_VERIFIER_FAIL, USER_VERIFIER_REQUEST, USER_VERIFIER_SUCCESS } from "../constants/userConstants"
 
 export const login = (username, password) => async (dispatch) => {
     try{
@@ -35,7 +35,7 @@ export const logout = () => (dispatch) => {
     dispatch({ type: USER_LOGOUT })
 }
 
-export const verifierAccountAction = (username, email) => async (dispatch) => {
+export const verifierAccountAction = () => async (dispatch) => {
     try{
         dispatch({
             type: USER_VERIFIER_REQUEST
@@ -58,7 +58,36 @@ export const verifierAccountAction = (username, email) => async (dispatch) => {
     }
 }
 
-export const registerAccountAction = (username, email, password) => async (dispatch) => {
+export const codeAccountAction = (username, name, email, password) => async (dispatch) => {
+    try{
+        dispatch({
+            type: CODE_REGISTER_REQUEST
+        })
+        const config = {
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }
+        const {data} = await api.post('send_code', {username:username, name: name, email:email, password:password}, config)
+        
+        dispatch({
+            type: CODE_REGISTER_SUCCESS,
+            payload: data
+        })
+
+    }
+    catch (error) {
+        dispatch({
+            type: CODE_REGISTER_FAIL,
+            payload: error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message
+        })
+    }
+}
+
+
+export const registerAccountAction = (username, name, email, password) => async (dispatch) => {
     try{
         dispatch({
             type: USER_VERIFIER_REQUEST
@@ -68,7 +97,7 @@ export const registerAccountAction = (username, email, password) => async (dispa
                 'Content-type': 'application/json'
             }
         }
-        const {data} = await api.post('user/register', {username:username, email:email, password:password}, config)
+        const {data} = await api.post('user/register', {username:username, name: name, email:email, password:password}, config)
         
         dispatch({
             type: USER_VERIFIER_SUCCESS,

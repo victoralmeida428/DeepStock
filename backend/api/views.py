@@ -232,6 +232,3 @@ class APIRegister(APIView):
             return Response({'success':'Account Created!'})
         except:
             return Response({'error':'Account not created'})
-
-#IDEIA
-# FAZER A FRONTEIRA DE EFICENCIA COM AS 10 MAIS LUCRATIVAS!!!!!!!!!!!!!!!!!!

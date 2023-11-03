@@ -2,7 +2,7 @@ import { legacy_createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { PredStocksReducer, PredTorchStocksReducer, favStocksReducer, favStocksUpdateReducer, infoStocksReducer, stocksCandleReducer } from './reducers/stocksReducers'
-import { userLoginReducer, userRegisterReducer, userVerifierReducer } from './reducers/userReducers'
+import { codeRegisterReducer, userLoginReducer, userRegisterReducer, userVerifierReducer } from './reducers/userReducers'
 
 const reducer = combineReducers({
     candleChart: stocksCandleReducer,
@@ -13,7 +13,8 @@ const reducer = combineReducers({
     predStock: PredStocksReducer,
     torchPredStock: PredTorchStocksReducer,
     userVerifier: userVerifierReducer,
-    userRegister: userRegisterReducer
+    userRegister: userRegisterReducer,
+    codeRegister: codeRegisterReducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?

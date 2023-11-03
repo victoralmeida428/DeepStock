@@ -1,4 +1,4 @@
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_VERIFIER_FAIL, USER_VERIFIER_REQUEST, USER_VERIFIER_SUCCESS } from "../constants/userConstants";
+import { CODE_REGISTER_FAIL, CODE_REGISTER_REQUEST, CODE_REGISTER_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_VERIFIER_FAIL, USER_VERIFIER_REQUEST, USER_VERIFIER_SUCCESS } from "../constants/userConstants";
 
 export const userLoginReducer = (state={}, action) => {
     switch (action.type) {
@@ -33,6 +33,19 @@ export const userRegisterReducer = (state={}, action) => {
         case USER_REGISTER_SUCCESS:
             return {loading: false, data: action.payload}
         case USER_REGISTER_FAIL:
+            return {loading: false, error: action.payload}
+        default:
+            return state
+    }
+}
+
+export const codeRegisterReducer = (state={}, action) => {
+    switch (action.type) {
+        case CODE_REGISTER_REQUEST:
+            return {loading: true}
+        case CODE_REGISTER_SUCCESS:
+            return {loading: false, data: action.payload}
+        case CODE_REGISTER_FAIL:
             return {loading: false, error: action.payload}
         default:
             return state
