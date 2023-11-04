@@ -11,7 +11,6 @@ export default function InformationScreen() {
     const [stock, setStock] = useState('')
     const info = useSelector((state) => state.stocksInformations)
     const [balace, setBalance] = useState(true)
-    const [income, setIncome] = useState(false)
     const [finan, setFinan] = useState(false)
     const [cash, setCash] = useState(false)
     console.log(stock, info)
@@ -59,7 +58,7 @@ export default function InformationScreen() {
                             setBalance(true)
                             setFinan(false)
                             setCash(false)
-                            setIncome(false)
+                            
                         }}>Balance</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
@@ -67,7 +66,7 @@ export default function InformationScreen() {
                             setBalance(false)
                             setFinan(false)
                             setCash(true)
-                            setIncome(false)
+                            
                         }}>CashFlow</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
@@ -75,7 +74,7 @@ export default function InformationScreen() {
                             setBalance(false)
                             setFinan(true)
                             setCash(false)
-                            setIncome(false)
+                            
                         }}>Financials</Nav.Link>
                     </Nav.Item>
                 </Nav>
