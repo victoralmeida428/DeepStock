@@ -23,7 +23,7 @@ export const stocksInformationsAction = (stock) => async (dispatch, getState) =>
     catch (error) {
         dispatch({
             type: STOCKS_INFORMATIONS_FAIL,
-            error: error.response && error.response?error.response:error.message?error.message:error
+            error: error
         })
 
     }
