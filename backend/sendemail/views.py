@@ -14,6 +14,5 @@ class APISendCode(APIView):
         number = np.random.randint(1000,9999)
         code_letter = ''.join(np.random.choice(list(letters), 3))
         form.data['code']=f'{code_letter}-{number}'
-        print(form.data)
         send_mail('Account Verifier', f'Hello {user}, your Code is: {code_letter}-{number}', 'suport.deepstock@gmail.com', recipient_list=[email])
         return Response(form.data)

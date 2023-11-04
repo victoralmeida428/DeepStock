@@ -1,11 +1,86 @@
+import { useDispatch, useSelector } from "react-redux";
 import BaseScreen from "./BaseScreen";
+import { useEffect, useState } from "react";
+import { stocksInformationsAction } from "../actions/informationsActions";
+import FormStocks from "../components/Form/Forms";
+import { Card, Nav } from "react-bootstrap";
+import CustomTable from "../components/CustomTable";
 
 export default function InformationScreen() {
+    const dispatch = useDispatch()
+    const [stock, setStock] = useState('')
+    const info = useSelector((state) => state.stocksInformations)
+    const [balace, setBalance] = useState(true)
+    const [income, setIncome] = useState(false)
+    const [finan, setFinan] = useState(false)
+    const [cash, setCash] = useState(false)
+    console.log(stock, info)
+
+    useEffect(()=>{
+        if (stock){
+        dispatch(stocksInformationsAction(stock))
+    }
+    },[ dispatch, stock])
+
+    const body = ()=>{
+        if (info.data&&balace){
+            const data = info.data.balance
+            return (Object.entries(data).map(([index, value], i)=>
+            <tr key={i}>
+                <td key={index}>{index}</td>
+                <td key={value}>{value}</td>
+            </tr>))
+        }
+        if (info.data&&finan){
+            const data = info.data.financial
+            return (Object.entries(data).map(([index, value], i)=>
+            <tr key={i}>
+                <td key={index}>{index}</td>
+                <td key={value}>{value}</td>
+            </tr>))
+        }
+        if (info.data&&cash){
+            const data = info.data.cash_flow
+            return (Object.entries(data).map(([index, value], i)=>
+            <tr key={i}>
+                <td key={index}>{index}</td>
+                <td key={value}>{value}</td>
+            </tr>))
+        }
+    }
+
     return (
         <BaseScreen>
-        <div className="mt-5 text-center" style={{fontSize:'50px', fontWeight:'bolder'}}>
-            WORKING IN PROGRESS <i class="fa-solid fa-hammer" style={{color: "#a1aa22"}}></i>
-        </div>
+            <FormStocks onChange={(e)=>setStock(e.value)}></FormStocks>
+            <Card className="mt-3 p-2">
+                <Nav variant="tabs" justify>
+                    <Nav.Item>
+                        <Nav.Link active={balace} onClick={()=>{
+                            setBalance(true)
+                            setFinan(false)
+                            setCash(false)
+                            setIncome(false)
+                        }}>Balance</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link active={cash} onClick={()=>{
+                            setBalance(false)
+                            setFinan(false)
+                            setCash(true)
+                            setIncome(false)
+                        }}>CashFlow</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link active={finan} onClick={()=>{
+                            setBalance(false)
+                            setFinan(true)
+                            setCash(false)
+                            setIncome(false)
+                        }}>Financials</Nav.Link>
+                    </Nav.Item>
+                </Nav>
+                <CustomTable body={body}/>
+            </Card>
         </BaseScreen>
     )
 }

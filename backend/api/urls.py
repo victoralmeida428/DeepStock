@@ -19,5 +19,6 @@ urlpatterns = [
     path('api', get_urls, name='index'),
     path('api/v1/user/login', MyTokenObtainPairView.as_view(), name='login'),
     path('api/v1/user/register', APIRegister.as_view(), name='register'),
+    path('api/v1/stocks/completinfo', APIInformations.as_view(), name='complet_informations')
     
 ]

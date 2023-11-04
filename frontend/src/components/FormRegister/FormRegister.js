@@ -49,10 +49,11 @@ export default function FormRegister(props) {
                     dispatch(codeAccountAction(form.username, form.name, form.email, form.password))
 
                 }
+                else{
+                    setError(verifier.error)
+                }
             }
-            else{
-                setError('error')
-            }
+            
         
       }
     return (

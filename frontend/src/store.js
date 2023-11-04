@@ -3,6 +3,7 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { PredStocksReducer, PredTorchStocksReducer, favStocksReducer, favStocksUpdateReducer, infoStocksReducer, stocksCandleReducer } from './reducers/stocksReducers'
 import { codeRegisterReducer, userLoginReducer, userRegisterReducer, userVerifierReducer } from './reducers/userReducers'
+import { stocksInfoReducer } from './reducers/infoReducers'
 
 const reducer = combineReducers({
     candleChart: stocksCandleReducer,
@@ -14,7 +15,8 @@ const reducer = combineReducers({
     torchPredStock: PredTorchStocksReducer,
     userVerifier: userVerifierReducer,
     userRegister: userRegisterReducer,
-    codeRegister: codeRegisterReducer
+    codeRegister: codeRegisterReducer,
+    stocksInformations: stocksInfoReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?

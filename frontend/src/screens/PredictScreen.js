@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {predStockAction, predTorchStockAction} from "../actions/stocksActions";
+import {predStockAction} from "../actions/stocksActions";
 import BaseScreen from "./BaseScreen";
-import {Container, Form} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import Loader from "../components/Loader";
 import FormStocks from "../components/Form/Forms";
 import ChartPred from "../components/Charts/ChartPred";

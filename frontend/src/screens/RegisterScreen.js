@@ -3,11 +3,13 @@ import FormRegister from "../components/FormRegister/FormRegister";
 import BaseScreen from "./BaseScreen";
 import { useSelector } from "react-redux";
 import FormConfirmation from "../components/FormRegister/FormConfirmation";
-import { useState } from "react";
+
+
 import Loader from "../components/Loader";
 
 export default function RegisterScreen() {
     const code = useSelector(state => state.codeRegister)
+    console.log(code);
     return (
         <BaseScreen>
             <Stack className="mt-3">

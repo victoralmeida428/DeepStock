@@ -232,3 +232,33 @@ class APIRegister(APIView):
             return Response({'success':'Account Created!'})
         except:
             return Response({'error':'Account not created'})
+
+class APIInformations(APIView):
+    def post(self, form):
+        self.stock = form.data.get('stock')
+        data = self.get_informations()
+        return Response(data)
+
+    def apply_value(self, x):
+        if isinstance(x, (float, int)):
+            if x>1000:
+                return f'{x:,.2f}'
+            else:
+                return f'{x:.3f}'
+        return x
+        
+    def get_informations(self):
+        ticket = yf.Ticker(self.stock)
+        col = ticket.quarterly_balancesheet.columns[1]
+        data = {'balance':{}, 'cash_flow':{}, 'financial':{}, 'incomestmt':{}}
+        for key, value in ticket.quarterly_balance_sheet.fillna('-').iterrows():
+            value = value.map(self.apply_value)
+            data['balance'][key] = value[col]
+        for key, value in ticket.quarterly_cash_flow.fillna('-').iterrows():
+            value = value.map(self.apply_value)
+            data['cash_flow'][key] = value[col]
+        for key, value in ticket.quarterly_financials.fillna('-').iterrows():
+            value = value.map(self.apply_value)
+            data['financial'][key] = value[col]
+
+        return data    
