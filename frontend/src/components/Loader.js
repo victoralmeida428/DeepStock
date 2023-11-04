@@ -1,20 +1,13 @@
 import React from 'react'
 import { Spinner } from 'react-bootstrap'
-
+import {BeatLoader} from 'react-spinners'
 function Loader() {
     return (
-        <Spinner
-            animation='border'
-            role='status'
-            style={{
-                height: '100px',
-                width: '100px',
-                margin: 'auto',
-                display: 'block'
-            }}
-        >
-            <span className='sr-only'>Loading...</span>
-        </Spinner>
+        <div className='d-flex align-items-center justify-content-center m-5'>
+  <BeatLoader color="#343a40" />
+</div>
+
+        
     )
 }
 
