@@ -56,7 +56,7 @@ export default function InformationScreen() {
             <Card className="mt-3 p-2">
                 <Nav variant="tabs" justify>
                     <Nav.Item>
-                        <Nav.Link active={balace} onClick={()=>{
+                        <Nav.Link style={{color:'#343a40'}} active={balace} onClick={()=>{
                             setBalance(true)
                             setFinan(false)
                             setCash(false)
@@ -64,7 +64,7 @@ export default function InformationScreen() {
                         }}>Balance</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link active={cash} onClick={()=>{
+                        <Nav.Link style={{color:'#343a40'}}  active={cash} onClick={()=>{
                             setBalance(false)
                             setFinan(false)
                             setCash(true)
@@ -72,7 +72,7 @@ export default function InformationScreen() {
                         }}>CashFlow</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link active={finan} onClick={()=>{
+                        <Nav.Link style={{color:'#343a40'}}  active={finan} onClick={()=>{
                             setBalance(false)
                             setFinan(true)
                             setCash(false)
