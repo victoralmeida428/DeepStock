@@ -16,9 +16,7 @@ export default function InformationScreen() {
     console.log(stock, info)
 
     useEffect(()=>{
-        if (stock){
         dispatch(stocksInformationsAction(stock))
-    }
     },[ dispatch, stock])
 
     const body = ()=>{
