@@ -5,11 +5,15 @@ import { stocksInformationsAction } from "../actions/informationsActions";
 import FormStocks from "../components/Form/Forms";
 import { Card, Nav } from "react-bootstrap";
 import CustomTable from "../components/CustomTable";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 export default function InformationScreen() {
     const dispatch = useDispatch()
     const [stock, setStock] = useState('')
     const info = useSelector((state) => state.stocksInformations)
+    const loginReducer = useSelector(state => state.userLogin)
+    const {userInfo} = loginReducer
     const [balace, setBalance] = useState(true)
     const [finan, setFinan] = useState(false)
     const [cash, setCash] = useState(false)
@@ -48,7 +52,7 @@ export default function InformationScreen() {
 
     return (
         <BaseScreen>
-            <FormStocks onChange={(e)=>setStock(e.value)}></FormStocks>
+            <FormStocks onChange={(e)=>setStock(e?e.value:'')}></FormStocks>
             <Card className="mt-3 p-2">
                 <Nav variant="tabs" justify>
                     <Nav.Item>
@@ -76,7 +80,8 @@ export default function InformationScreen() {
                         }}>Financials</Nav.Link>
                     </Nav.Item>
                 </Nav>
-                <CustomTable body={body}/>
+                {userInfo?<CustomTable body={body}/>:<Message variant='secondary'>Please, make <a href="login">login</a></Message>}
+                {info.loading?<Loader/>:null}
             </Card>
         </BaseScreen>
     )

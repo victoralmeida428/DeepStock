@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import {candleChart, favStocksAction, infoStocksTable} from "../actions/stocksActions";
 import CandleStick from "../components/Stocks/chart";
 import Loader from "../components/Loader";
-import {Carousel, Container, Stack} from "react-bootstrap";
+import { Container} from "react-bootstrap";
 import FormStocks from "../components/Form/Forms";
 import TableInfo from "../components/TableInfo";
 
