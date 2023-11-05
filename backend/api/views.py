@@ -241,7 +241,7 @@ class APIInformations(APIView):
 
     def apply_value(self, x):
         if isinstance(x, (float, int)):
-            if x>1000:
+            if abs(x)>1000:
                 return f'{x:,.2f}'
             else:
                 return f'{x:.3f}'
