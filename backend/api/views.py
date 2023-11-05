@@ -250,7 +250,7 @@ class APIInformations(APIView):
     def get_informations(self):
         ticket = yf.Ticker(self.stock)
         col = ticket.quarterly_balancesheet.columns[1]
-        data = {'balance':{'Last Date':f'{col:%d/%M/%Y}'}, 'cash_flow':{'Last Date':f'{col:%d/%M/%Y}'}, 'financial':{'Last Date':f'{col:%d/%M/%Y}'}, 'incomestmt':{'Last Date':f'{col:%d/%M/%Y}'}}
+        data = {'balance':{'Last Date':f'{col:%d/%m/%Y}'}, 'cash_flow':{'Last Date':f'{col:%d/%m/%Y}'}, 'financial':{'Last Date':f'{col:%d/%m/%Y}'}, 'incomestmt':{'Last Date':f'{col:%d/%m/%Y}'}}
         for key, value in ticket.quarterly_balance_sheet.fillna('-').iterrows():
             value = value.map(self.apply_value)
             data['balance'][key] = value[col]
