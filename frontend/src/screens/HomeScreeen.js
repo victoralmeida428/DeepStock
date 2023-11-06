@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import {useSelector} from "react-redux";
 import BaseScreen from "./BaseScreen";
 import background from './backgrounhome.jpg'
+import FunctionPayPalButton from "../components/PayPalButton";
 
 export default function HomeScreen() {
     const loginReducer = useSelector(state => state.userLogin)
@@ -58,6 +59,7 @@ export default function HomeScreen() {
             <Row>
                 <Image src={background} height={450}></Image>
             </Row>
+            <FunctionPayPalButton method='mensal' />
         </BaseScreen>
     )
 }
