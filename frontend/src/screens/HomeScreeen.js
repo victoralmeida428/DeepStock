@@ -59,7 +59,6 @@ export default function HomeScreen() {
             <Row>
                 <Image src={background} height={450}></Image>
             </Row>
-            <FunctionPayPalButton method='mensal' />
         </BaseScreen>
     )
 }

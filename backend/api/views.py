@@ -218,7 +218,7 @@ class APIPredict(APIView):
 class APIVerifierAccount(ModelViewSet):
     serializer_class = UserRegisterSerializer
     queryset = User.objects.all()
-    
+
 
 class APIRegister(APIView):
 
